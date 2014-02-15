@@ -14,7 +14,7 @@ import java.util.List;
 public class GraphicsTestView  extends View {
 
 
-    private static final float GAME_SPEED = 5;
+    private static final float GAME_SPEED = 30;
     float x = 0;
 
     List<Point> points = new ArrayList<Point>();
@@ -38,11 +38,11 @@ public class GraphicsTestView  extends View {
     protected void onDraw(Canvas canvas) {
 
         Point lastPoint = points.get(points.size()-1);
-        if(lastPoint.x < this.getWidth()) {
+        if(lastPoint.x < this.getWidth()+200) {
             points.add(createPoint(lastPoint.x));
         }
         Point secondPoint = points.get(1);
-        if(secondPoint.x < 0) {
+        if(secondPoint.x < -100) {
             x = 0;
             points.remove(0);
         }
@@ -61,7 +61,7 @@ public class GraphicsTestView  extends View {
     }
 
     private Point createPoint(float x) {
-        return new Point((float)(x + Math.random()*200), (float)Math.random()*500);
+        return new Point(100.f+(float)(x + Math.random()*200), (float)Math.random()*300);
     }
 
     private Path generatePath(List<Point> points) {
