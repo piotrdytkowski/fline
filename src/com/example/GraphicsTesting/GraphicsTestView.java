@@ -74,6 +74,7 @@ public class GraphicsTestView  extends View {
             path.quadTo(prevPoint.x, prevPoint.y, (prevPoint.x+nextPoint.x)/2, (nextPoint.y+prevPoint.y)/2);
             prevPoint = nextPoint;
         }
+        path.lineTo(prevPoint.x, prevPoint.y);
         return path;
     }
 
