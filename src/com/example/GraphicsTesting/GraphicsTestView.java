@@ -42,7 +42,7 @@ public class GraphicsTestView  extends View {
             points.add(createPoint(lastPoint.x));
         }
         Point secondPoint = points.get(1);
-        if(secondPoint.x < -100) {
+        if(secondPoint.x < -200) {
             x = 0;
             points.remove(0);
         }
@@ -61,7 +61,7 @@ public class GraphicsTestView  extends View {
     }
 
     private Point createPoint(float x) {
-        return new Point(100.f+(float)(x + Math.random()*200), (float)Math.random()*300);
+        return new Point(100.f+(float)(x + Math.random()*200), (float)Math.random() * this.getHeight());
     }
 
     private Path generatePath(List<Point> points) {
