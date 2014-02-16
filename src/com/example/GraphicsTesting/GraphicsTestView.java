@@ -1,11 +1,11 @@
 package com.example.GraphicsTesting;
 
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Path;
+import android.graphics.*;
+import android.graphics.drawable.BitmapDrawable;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageView;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -14,22 +14,25 @@ import java.util.List;
 public class GraphicsTestView  extends View {
 
 
-    private static final float GAME_SPEED = 30;
+    private static final float GAME_SPEED = 0;
     float x = 0;
+
+    private MotionEvent event;
 
     List<Point> points = new ArrayList<Point>();
     Paint paint = new Paint() {
         {
             setStyle(Paint.Style.STROKE);
             setStrokeCap(Paint.Cap.ROUND);
-            setColor(Color.WHITE);
-            setStrokeWidth(3.0f);
+            setColor(Color.GREEN);
+            setStrokeWidth(10.0f);
             setAntiAlias(true);
         }
     };
 
     public GraphicsTestView(Context context) {
         super(context);
+        setDrawingCacheEnabled(true);
         points.add(createPoint(x));
     }
 
@@ -52,6 +55,19 @@ public class GraphicsTestView  extends View {
         canvas.drawPath(path, paint);
         movePoints();
         invalidate();  // Force a re-draw
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        this.event = event;
+        getColourAtLocation((int)event.getX(), (int)event.getY());
+        return super.onTouchEvent(event);
+    }
+
+    private void getColourAtLocation(int x, int y) {
+        Bitmap drawingCache = this.getDrawingCache();
+        int pixel = drawingCache.getPixel(x,y);
+        System.out.println("Pixel Colour: " + pixel);
     }
 
     private void movePoints() {
