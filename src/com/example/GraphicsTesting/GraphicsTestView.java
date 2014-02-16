@@ -1,22 +1,28 @@
 package com.example.GraphicsTesting;
 
-import android.content.Context;
-import android.graphics.*;
-import android.view.Display;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.WindowManager;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Path;
+import android.view.MotionEvent;
+import android.view.View;
 
 public class GraphicsTestView  extends View {
 
 
     private static final float GAME_SPEED = 30;
     private static final int SEARCH_RADIUS = 10;
-    float x = 0;
+    private static final int AWARD = 10;
+    private float x;
+    private int score;
+    
+    
 
     private MotionEvent event;
 
@@ -33,16 +39,17 @@ public class GraphicsTestView  extends View {
 
     public GraphicsTestView(Context context) {
         super(context);
-        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        Display display = wm.getDefaultDisplay();
-        x = display.getWidth();
-        points.add(createPoint(x));
         setDrawingCacheEnabled(true);
     }
 
     // Called back to draw the view. Also called by invalidate().
     @Override
     protected void onDraw(Canvas canvas) {
+    	if (points.size() == 0) {
+            x = this.getWidth();
+            points.add(createPoint(x));
+    	}
+    	
 
         Point lastPoint = points.get(points.size()-1);
         if(lastPoint.x < this.getWidth()+200) {
@@ -56,16 +63,25 @@ public class GraphicsTestView  extends View {
         x -= GAME_SPEED;
         Path path = generatePath(points);
         canvas.drawPath(path, paint);
+        
+        recalculatePoints();
+        
         movePoints();
         invalidate();  // Force a re-draw
     }
 
-    @Override
+    private void recalculatePoints() {
+    	boolean lineHit = event != null && scanCircleAtPoint((int)event.getX(), (int)event.getY());
+    	boolean screenPressed = event != null && event.getAction() == MotionEvent.ACTION_MOVE;
+    	if(lineHit && screenPressed) {
+    		score += AWARD;
+            System.out.println("Scored! " + score);
+        }
+	}
+
+	@Override
     public boolean onTouchEvent(MotionEvent event) {
         this.event = event;
-        if(scanCircleAtPoint((int)event.getX(), (int)event.getY())) {
-            System.out.println("Hit the line!");
-        }
         return super.onTouchEvent(event);
     }
 
@@ -77,16 +93,18 @@ public class GraphicsTestView  extends View {
      */
     private boolean scanCircleAtPoint(int x, int y) {
         Bitmap drawingCache = this.getDrawingCache();
-        for(int xi = -SEARCH_RADIUS; xi <= SEARCH_RADIUS; xi++) {
-            for(int yi = -SEARCH_RADIUS; yi <= SEARCH_RADIUS; yi++) {
-                if(xi*xi +yi*yi <= SEARCH_RADIUS * SEARCH_RADIUS) {
-                    if(getColourAtLocation(drawingCache, x+xi, y+yi) != 0) {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
+        if (drawingCache != null) {
+			for (int xi = -SEARCH_RADIUS; xi <= SEARCH_RADIUS; xi++) {
+				for (int yi = -SEARCH_RADIUS; yi <= SEARCH_RADIUS; yi++) {
+					if (xi * xi + yi * yi <= SEARCH_RADIUS * SEARCH_RADIUS) {
+						if (getColourAtLocation(drawingCache, x + xi, y + yi) != 0) {
+							return true;
+						}
+					}
+				}
+			}
+		}
+		return false;
     }
 
     /**
