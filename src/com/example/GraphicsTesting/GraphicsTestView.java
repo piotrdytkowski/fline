@@ -2,10 +2,10 @@ package com.example.GraphicsTesting;
 
 import android.content.Context;
 import android.graphics.*;
-import android.graphics.drawable.BitmapDrawable;
+import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ImageView;
+import android.view.WindowManager;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -14,7 +14,8 @@ import java.util.List;
 public class GraphicsTestView  extends View {
 
 
-    private static final float GAME_SPEED = 0;
+    private static final float GAME_SPEED = 30;
+    private static final int SEARCH_RADIUS = 10;
     float x = 0;
 
     private MotionEvent event;
@@ -32,8 +33,11 @@ public class GraphicsTestView  extends View {
 
     public GraphicsTestView(Context context) {
         super(context);
-        setDrawingCacheEnabled(true);
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        x = display.getWidth();
         points.add(createPoint(x));
+        setDrawingCacheEnabled(true);
     }
 
     // Called back to draw the view. Also called by invalidate().
@@ -50,7 +54,6 @@ public class GraphicsTestView  extends View {
             points.remove(0);
         }
         x -= GAME_SPEED;
-
         Path path = generatePath(points);
         canvas.drawPath(path, paint);
         movePoints();
@@ -60,16 +63,51 @@ public class GraphicsTestView  extends View {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         this.event = event;
-        getColourAtLocation((int)event.getX(), (int)event.getY());
+        if(scanCircleAtPoint((int)event.getX(), (int)event.getY())) {
+            System.out.println("Hit the line!");
+        }
         return super.onTouchEvent(event);
     }
 
-    private void getColourAtLocation(int x, int y) {
+    /**
+     * Scans for colours in a circle around the given x,y.
+     * @param x the x coordinate to scan from.
+     * @param y the y coordinate to scan from.
+     * @return whether a colour was found.
+     */
+    private boolean scanCircleAtPoint(int x, int y) {
         Bitmap drawingCache = this.getDrawingCache();
-        int pixel = drawingCache.getPixel(x,y);
-        System.out.println("Pixel Colour: " + pixel);
+        for(int xi = -SEARCH_RADIUS; xi <= SEARCH_RADIUS; xi++) {
+            for(int yi = -SEARCH_RADIUS; yi <= SEARCH_RADIUS; yi++) {
+                if(xi*xi +yi*yi <= SEARCH_RADIUS * SEARCH_RADIUS) {
+                    if(getColourAtLocation(drawingCache, x+xi, y+yi) != 0) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
+    /**
+     * Gets the colour at the given x,y on this view.
+     *
+     * @param bitmap the bitmap to query.
+     * @param x the x coordinate to scan from.
+     * @param y the y coordinate to scan from.
+     * @return the colour that was found.
+     */
+    private int getColourAtLocation(Bitmap bitmap, int x, int y) {
+        if(x < 0 || y < 0 || x >= bitmap.getWidth() || y >= bitmap.getHeight()) {
+            return 0;
+        }
+        return bitmap.getPixel(x, y);
+    }
+
+
+    /**
+     * Movies all line points according to the game speed.
+     */
     private void movePoints() {
         for (Point point : points) {
             point.x -= GAME_SPEED;
