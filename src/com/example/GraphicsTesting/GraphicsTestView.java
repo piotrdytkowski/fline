@@ -15,11 +15,12 @@ import android.view.View;
 public class GraphicsTestView  extends View {
 
 
-    private static final float GAME_SPEED = 10;
+    private static final float GAME_SPEED = 5;
     private static final int AWARD = 10;
-	private static final float PADDING = 20;
-	private static final float THICK_STROKE = 15;
-	private static final float THIN_STROKE = 10;
+	private static final float TEXT_PADDING = 30;
+	private static final float BORDER_PADDING = 30;
+	private static final float THICK_STROKE = 30;
+	private static final float THIN_STROKE = 20;
     private float xOffset;
     private int score;
     
@@ -47,12 +48,13 @@ public class GraphicsTestView  extends View {
             setColor(Color.MAGENTA);
             setStrokeWidth(2.0f);
             setAntiAlias(true);
+            setTextSize(30);
         }
     };
 
     public GraphicsTestView(Context context) {
         super(context);
-        circleScanner = new CircleScanner(10);
+        circleScanner = new CircleScanner(20);
         trackGenerator = new TrackGenerator();
     }
 
@@ -81,7 +83,7 @@ public class GraphicsTestView  extends View {
     	Path path = trackGenerator.generateTrack(points);
     	canvas.drawPath(path, paint);
     	localCanvas.drawPath(path, paint);
-    	canvas.drawText("Score: " + score, PADDING, PADDING, textPaint);
+    	canvas.drawText("Score: " + score, TEXT_PADDING, TEXT_PADDING, textPaint);
 	}
 
 	private void applyMovement() {
@@ -91,12 +93,12 @@ public class GraphicsTestView  extends View {
 	private void managePoints() {
     	if (points.size() == 0) {
             xOffset = this.getWidth();
-            points.add(createPoint(xOffset));
+            points.add(createPoint(new FPoint(xOffset, this.getHeight() / 2)));
     	}
 
         FPoint lastPoint = points.get(points.size()-1);
         if(lastPoint.x < this.getWidth()+300) {
-            points.add(createPoint(lastPoint.x));
+            points.add(createPoint(lastPoint));
         }
         FPoint secondPoint = points.get(1);
         if(secondPoint.x < -200) {
@@ -108,11 +110,13 @@ public class GraphicsTestView  extends View {
 	private void recalculateScore() {
         boolean screenPressed = event != null && event.getAction() == MotionEvent.ACTION_MOVE;
         paint.setStrokeWidth(THICK_STROKE);
+        paint.setColor(Color.GREEN);
         if(screenPressed) {
          boolean lineHit = circleScanner.scanCircleAtPoint(localCache, event.getX(), event.getY());
             if(lineHit) {
                 score += AWARD;
                 paint.setStrokeWidth(THIN_STROKE);
+                paint.setColor(Color.MAGENTA);
             }
         }
 	}
@@ -132,7 +136,11 @@ public class GraphicsTestView  extends View {
         }
     }
 
-    private FPoint createPoint(float x) {
-        return new FPoint(100.f+(float)(x + Math.random()*200), (float)Math.random() * this.getHeight());
+    private FPoint createPoint(FPoint p) {
+    	float diff = (float)Math.random() * this.getHeight() * 0.30f;
+    	float y = Math.abs(Math.random() < 0.5 ? p.y - diff : p.y + diff);
+    	y = Math.max(BORDER_PADDING, y);
+    	y = Math.min(this.getHeight() - BORDER_PADDING, y);
+        return new FPoint(100.f+(float)(p.x + Math.random()*200), y);
     }
 }
