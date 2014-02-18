@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -16,11 +18,16 @@ public class GraphicsTestView  extends View {
     private static final float GAME_SPEED = 10;
     private static final int AWARD = 10;
 	private static final float PADDING = 20;
+	private static final float THICK_STROKE = 15;
+	private static final float THIN_STROKE = 10;
     private float xOffset;
     private int score;
     
     private CircleScanner circleScanner;
     private TrackGenerator trackGenerator;
+    
+    private Bitmap localCache;
+    private Canvas localCanvas;
 
     private MotionEvent event;
 
@@ -30,7 +37,7 @@ public class GraphicsTestView  extends View {
             setStyle(Paint.Style.STROKE);
             setStrokeCap(Paint.Cap.ROUND);
             setColor(Color.GREEN);
-            setStrokeWidth(10.0f);
+            setStrokeWidth(THICK_STROKE);
             setAntiAlias(true);
         }
     };
@@ -45,7 +52,6 @@ public class GraphicsTestView  extends View {
 
     public GraphicsTestView(Context context) {
         super(context);
-        setDrawingCacheEnabled(true);
         circleScanner = new CircleScanner(10);
         trackGenerator = new TrackGenerator();
     }
@@ -53,16 +59,28 @@ public class GraphicsTestView  extends View {
     // Called back to draw the view. Also called by invalidate().
     @Override
     protected void onDraw(Canvas canvas) {
+    	if (localCache == null) {
+			localCache = Bitmap.createBitmap(canvas.getWidth(), canvas.getHeight(), Bitmap.Config.RGB_565);
+			localCanvas = new Canvas(localCache);
+		}
     	managePoints();
         applyMovement();
         drawGame(canvas);
         recalculateScore();
+        cleanLocalCache();
         movePoints();
         invalidate();  // Force a re-draw
     }
 
-    private void drawGame(Canvas canvas) {
-    	canvas.drawPath(trackGenerator.generateTrack(points), paint);
+    private void cleanLocalCache() {
+		localCache.eraseColor(Color.BLACK);
+	}
+
+	private void drawGame(Canvas canvas) {
+		//canvas.setBitmap(localCache);
+    	Path path = trackGenerator.generateTrack(points);
+    	canvas.drawPath(path, paint);
+    	localCanvas.drawPath(path, paint);
     	canvas.drawText("Score: " + score, PADDING, PADDING, textPaint);
 	}
 
@@ -88,13 +106,14 @@ public class GraphicsTestView  extends View {
 	}
 
 	private void recalculateScore() {
-    	boolean lineHit = event != null && circleScanner.scanCircleAtPoint(this.getDrawingCache(), event.getX(), event.getY());
-    	boolean screenPressed = event != null && event.getAction() == MotionEvent.ACTION_MOVE;
-    	if(lineHit && screenPressed) {
-    		score += AWARD;
-    		paint.setStrokeWidth(3);
-        } else {
-        	paint.setStrokeWidth(10);
+        boolean screenPressed = event != null && event.getAction() == MotionEvent.ACTION_MOVE;
+        paint.setStrokeWidth(THICK_STROKE);
+        if(screenPressed) {
+         boolean lineHit = circleScanner.scanCircleAtPoint(localCache, event.getX(), event.getY());
+            if(lineHit) {
+                score += AWARD;
+                paint.setStrokeWidth(THIN_STROKE);
+            }
         }
 	}
 

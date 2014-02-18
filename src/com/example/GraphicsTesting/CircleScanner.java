@@ -1,6 +1,7 @@
 package com.example.GraphicsTesting;
 
 import android.graphics.Bitmap;
+import android.graphics.Color;
 
 public class CircleScanner {
 	
@@ -22,7 +23,7 @@ public class CircleScanner {
 			for (float xi = -searchRadius; xi <= searchRadius; xi++) {
 				for (float yi = -searchRadius; yi <= searchRadius; yi++) {
 					if (xi * xi + yi * yi <= searchRadius * searchRadius) {
-						if (getColourAtLocation(drawingCache, x + xi, y + yi) != 0) {
+						if (getColourAtLocation(drawingCache, x + xi, y + yi) != Color.BLACK) {
 							return true;
 						}
 					}
