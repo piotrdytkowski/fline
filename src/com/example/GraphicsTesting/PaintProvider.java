@@ -56,6 +56,15 @@ public class PaintProvider {
             setTextSize(30);
         }
     };
+    private static final Paint PAINT_SHIP = new Paint() {
+        {
+            setStyle(Paint.Style.STROKE);
+            setStrokeCap(Paint.Cap.SQUARE);
+            setColor(Color.WHITE);
+            setStrokeWidth(THIN_STROKE);
+            setAntiAlias(true);
+        }
+    };
     
 	public void deactivate() {
 		paintStroke = PAINT_STROKE_INACTIVE;
@@ -77,6 +86,9 @@ public class PaintProvider {
 	
 	public Paint getPaintText() {
 		return PAINT_TEXT;
+	}
+	public Paint getPaintShip() {
+		return PAINT_SHIP;
 	}
     
 }

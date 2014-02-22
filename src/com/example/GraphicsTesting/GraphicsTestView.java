@@ -21,10 +21,14 @@ public class GraphicsTestView  extends View {
     private static final int AWARD = 10;
 	private static final float TEXT_PADDING = 30;
 	private static final float BORDER_PADDING = 30;
+	private static final float SHIP_DIMENSIONS = 70;
 
     private float xOffset;
     private int score;
     private float currentSpeed;
+    
+    private float shipX;
+    private float shipY;
     
     private CircleScanner circleScanner;
     private TrackGenerator trackGenerator;
@@ -56,6 +60,9 @@ public class GraphicsTestView  extends View {
     	if (localCache == null) {
 			localCache = Bitmap.createBitmap(canvas.getWidth(), canvas.getHeight(), Bitmap.Config.RGB_565);
 			localCanvas = new Canvas(localCache);
+			
+			shipX = 70;
+			shipY = canvas.getHeight() / 2;
 		}
     	managePoints();
         drawGame(canvas);
@@ -98,6 +105,20 @@ public class GraphicsTestView  extends View {
     	localCanvas.drawPath(path, paintProvider.getPaintStroke());
     	canvas.drawText("Score: " + score, TEXT_PADDING, TEXT_PADDING, paintProvider.getPaintText());
     	canvas.drawText("Speed: " + currentSpeed, TEXT_PADDING + 200, TEXT_PADDING, paintProvider.getPaintText());
+    	
+    	drawShip(canvas);
+	}
+
+	private void drawShip(Canvas canvas) {
+		Path ship = new Path();
+		float halfDim = SHIP_DIMENSIONS / 2;
+		float quarterDim = SHIP_DIMENSIONS / 4;
+		ship.moveTo(shipX - halfDim, shipY - halfDim);
+		ship.lineTo(shipX + halfDim, shipY);
+		ship.lineTo(shipX - halfDim, shipY + halfDim);
+		ship.lineTo(shipX - quarterDim, shipY);
+		ship.lineTo(shipX - halfDim, shipY - halfDim);
+		canvas.drawPath(ship, paintProvider.getPaintShip());
 	}
 
 	private void managePoints() {
