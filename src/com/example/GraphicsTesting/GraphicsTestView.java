@@ -7,7 +7,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Path;
 import android.view.MotionEvent;
 import android.view.View;
@@ -16,20 +15,20 @@ public class GraphicsTestView  extends View {
 
 
     private static final float START_GAME_SPEED = 5;
-    private static final float MAX_SPEED = 30;
+    private static final float MAX_SPEED = 20;
     private static final float ACCELERATION = .05f;
-    private static final float DECELERATION = .2f;
+    private static final float DECELERATION = .5f;
     private static final int AWARD = 10;
 	private static final float TEXT_PADDING = 30;
 	private static final float BORDER_PADDING = 30;
-	private static final float THICK_STROKE = 30;
-	private static final float THIN_STROKE = 20;
+
     private float xOffset;
     private int score;
     private float currentSpeed;
     
     private CircleScanner circleScanner;
     private TrackGenerator trackGenerator;
+    private PaintProvider paintProvider;
     
     private Bitmap localCache;
     private Canvas localCanvas;
@@ -38,40 +37,15 @@ public class GraphicsTestView  extends View {
 
     private boolean touchOne = false;
     private boolean touchTwo = false;
-
+    
     List<FPoint> points = new ArrayList<FPoint>();
-    Paint paint = new Paint() {
-        {
-            setStyle(Paint.Style.STROKE);
-            setStrokeCap(Paint.Cap.ROUND);
-            setColor(Color.GREEN);
-            setStrokeWidth(THICK_STROKE);
-            setAntiAlias(true);
-        }
-    };
-    Paint electroPaint = new Paint() {
-        {
-            setStyle(Paint.Style.STROKE);
-            setStrokeCap(Paint.Cap.ROUND);
-            setColor(Color.BLUE);
-            setStrokeWidth(2);
-            setAntiAlias(true);
-        }
-    };
-    Paint textPaint = new Paint() {
-        {
-            setStyle(Paint.Style.STROKE);
-            setColor(Color.MAGENTA);
-            setStrokeWidth(2.0f);
-            setAntiAlias(true);
-            setTextSize(30);
-        }
-    };
+    
 
     public GraphicsTestView(Context context) {
         super(context);
         circleScanner = new CircleScanner(40);
         trackGenerator = new TrackGenerator();
+        paintProvider = new PaintProvider();
         currentSpeed = START_GAME_SPEED;
     }
 
@@ -117,13 +91,13 @@ public class GraphicsTestView  extends View {
 	private void drawGame(Canvas canvas) {
 		//canvas.setBitmap(localCache);
     	Path path = trackGenerator.generateTrack(points);
-    	canvas.drawPath(path, paint);
+    	canvas.drawPath(path, paintProvider.getPaintStroke());
         for(int i = 0; i < 2; i++) {
-            canvas.drawPath(trackGenerator.generateTrackWithOffset(points, ((float)Math.random()*500)-250, 40-(float)Math.random()*40.0f), electroPaint);
+            canvas.drawPath(trackGenerator.generateTrackWithOffset(points, ((float)Math.random()*500)-250, 40-(float)Math.random()*40.0f), paintProvider.getPaintElectro());
         }
-    	localCanvas.drawPath(path, paint);
-    	canvas.drawText("Score: " + score, TEXT_PADDING, TEXT_PADDING, textPaint);
-    	canvas.drawText("Speed: " + currentSpeed, TEXT_PADDING + 200, TEXT_PADDING, textPaint);
+    	localCanvas.drawPath(path, paintProvider.getPaintStroke());
+    	canvas.drawText("Score: " + score, TEXT_PADDING, TEXT_PADDING, paintProvider.getPaintText());
+    	canvas.drawText("Speed: " + currentSpeed, TEXT_PADDING + 200, TEXT_PADDING, paintProvider.getPaintText());
 	}
 
 	private void managePoints() {
@@ -144,9 +118,7 @@ public class GraphicsTestView  extends View {
 	}
 
 	private void recalculateScore() {
-        paint.setStrokeWidth(THICK_STROKE);
-        paint.setColor(Color.GREEN);
-        electroPaint.setColor(Color.BLUE);
+        paintProvider.deactivate();
         if(touchOne) {
             boolean lineHit = circleScanner.scanCircleAtPoint(localCache, event.getX(0), event.getY(0));
             if(lineHit) {
@@ -154,9 +126,7 @@ public class GraphicsTestView  extends View {
 					currentSpeed += ACCELERATION;
 				}
 				score += AWARD;
-                paint.setStrokeWidth(THIN_STROKE);
-                paint.setColor(Color.MAGENTA);
-                electroPaint.setColor(Color.WHITE);
+                paintProvider.activate();
             } else {
             	decreaseSpeed();
             }
