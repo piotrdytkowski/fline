@@ -32,6 +32,9 @@ public class GraphicsTestView  extends View {
 
     private MotionEvent event;
 
+    private boolean touchOne = false;
+    private boolean touchTwo = false;
+
     List<FPoint> points = new ArrayList<FPoint>();
     Paint paint = new Paint() {
         {
@@ -70,6 +73,7 @@ public class GraphicsTestView  extends View {
     // Called back to draw the view. Also called by invalidate().
     @Override
     protected void onDraw(Canvas canvas) {
+        manageTouchState();
     	if (localCache == null) {
 			localCache = Bitmap.createBitmap(canvas.getWidth(), canvas.getHeight(), Bitmap.Config.RGB_565);
 			localCanvas = new Canvas(localCache);
@@ -81,6 +85,25 @@ public class GraphicsTestView  extends View {
         cleanLocalCache();
         movePoints();
         invalidate();  // Force a re-draw
+    }
+
+    private void manageTouchState() {
+        if(event != null) {
+            if(event.getPointerCount() == 1) {
+                touchOne = true;
+                touchTwo = false;
+            } else if(event.getPointerCount() >= 2) {
+                touchTwo = true;
+                if(event.getAction() == MotionEvent.ACTION_POINTER_2_UP) {
+                    System.out.println("Second touch up!");
+                    touchTwo = false;
+                }
+            }
+            if(event.getAction() == MotionEvent.ACTION_UP) {
+                System.out.println("First touch up!");
+                touchOne = false;
+            }
+        }
     }
 
     private void cleanLocalCache() {
@@ -120,12 +143,11 @@ public class GraphicsTestView  extends View {
 	}
 
 	private void recalculateScore() {
-        boolean screenPressed = event != null && event.getAction() == MotionEvent.ACTION_MOVE;
         paint.setStrokeWidth(THICK_STROKE);
         paint.setColor(Color.GREEN);
         electroPaint.setColor(Color.BLUE);
-        if(screenPressed) {
-         boolean lineHit = circleScanner.scanCircleAtPoint(localCache, event.getX(), event.getY());
+        if(touchOne) {
+            boolean lineHit = circleScanner.scanCircleAtPoint(localCache, event.getX(0), event.getY(0));
             if(lineHit) {
                 score += AWARD;
                 paint.setStrokeWidth(THIN_STROKE);
