@@ -6,4 +6,9 @@ public class FPoint {
         this.x = x;
         this.y = y;
     }
+
+    public FPoint(FPoint point) {
+        this.x = point.x;
+        this.y = point.y;
+    }
 }

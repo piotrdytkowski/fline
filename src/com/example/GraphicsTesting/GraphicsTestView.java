@@ -15,7 +15,7 @@ import android.view.View;
 public class GraphicsTestView  extends View {
 
 
-    private static final float GAME_SPEED = 5;
+    private static final float GAME_SPEED = 15;
     private static final int AWARD = 10;
 	private static final float TEXT_PADDING = 30;
 	private static final float BORDER_PADDING = 30;
@@ -42,6 +42,15 @@ public class GraphicsTestView  extends View {
             setAntiAlias(true);
         }
     };
+    Paint electroPaint = new Paint() {
+        {
+            setStyle(Paint.Style.STROKE);
+            setStrokeCap(Paint.Cap.ROUND);
+            setColor(Color.BLUE);
+            setStrokeWidth(2);
+            setAntiAlias(true);
+        }
+    };
     Paint textPaint = new Paint() {
         {
             setStyle(Paint.Style.STROKE);
@@ -54,7 +63,7 @@ public class GraphicsTestView  extends View {
 
     public GraphicsTestView(Context context) {
         super(context);
-        circleScanner = new CircleScanner(20);
+        circleScanner = new CircleScanner(40);
         trackGenerator = new TrackGenerator();
     }
 
@@ -82,6 +91,9 @@ public class GraphicsTestView  extends View {
 		//canvas.setBitmap(localCache);
     	Path path = trackGenerator.generateTrack(points);
     	canvas.drawPath(path, paint);
+        for(int i = 0; i < 2; i++) {
+            canvas.drawPath(trackGenerator.generateTrackWithOffset(points, ((float)Math.random()*500)-250, 40-(float)Math.random()*40.0f), electroPaint);
+        }
     	localCanvas.drawPath(path, paint);
     	canvas.drawText("Score: " + score, TEXT_PADDING, TEXT_PADDING, textPaint);
 	}
@@ -111,12 +123,14 @@ public class GraphicsTestView  extends View {
         boolean screenPressed = event != null && event.getAction() == MotionEvent.ACTION_MOVE;
         paint.setStrokeWidth(THICK_STROKE);
         paint.setColor(Color.GREEN);
+        electroPaint.setColor(Color.BLUE);
         if(screenPressed) {
          boolean lineHit = circleScanner.scanCircleAtPoint(localCache, event.getX(), event.getY());
             if(lineHit) {
                 score += AWARD;
                 paint.setStrokeWidth(THIN_STROKE);
                 paint.setColor(Color.MAGENTA);
+                electroPaint.setColor(Color.WHITE);
             }
         }
 	}
@@ -128,7 +142,7 @@ public class GraphicsTestView  extends View {
     }
 
     /**
-     * Movies all line points according to the game speed.
+     * Moves all line points according to the game speed.
      */
     private void movePoints() {
         for (FPoint point : points) {
