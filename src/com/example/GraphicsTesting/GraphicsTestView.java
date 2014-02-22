@@ -15,7 +15,10 @@ import android.view.View;
 public class GraphicsTestView  extends View {
 
 
-    private static final float GAME_SPEED = 15;
+    private static final float START_GAME_SPEED = 5;
+    private static final float MAX_SPEED = 30;
+    private static final float ACCELERATION = .05f;
+    private static final float DECELERATION = .2f;
     private static final int AWARD = 10;
 	private static final float TEXT_PADDING = 30;
 	private static final float BORDER_PADDING = 30;
@@ -23,6 +26,7 @@ public class GraphicsTestView  extends View {
 	private static final float THIN_STROKE = 20;
     private float xOffset;
     private int score;
+    private float currentSpeed;
     
     private CircleScanner circleScanner;
     private TrackGenerator trackGenerator;
@@ -68,6 +72,7 @@ public class GraphicsTestView  extends View {
         super(context);
         circleScanner = new CircleScanner(40);
         trackGenerator = new TrackGenerator();
+        currentSpeed = START_GAME_SPEED;
     }
 
     // Called back to draw the view. Also called by invalidate().
@@ -79,7 +84,6 @@ public class GraphicsTestView  extends View {
 			localCanvas = new Canvas(localCache);
 		}
     	managePoints();
-        applyMovement();
         drawGame(canvas);
         recalculateScore();
         cleanLocalCache();
@@ -119,10 +123,7 @@ public class GraphicsTestView  extends View {
         }
     	localCanvas.drawPath(path, paint);
     	canvas.drawText("Score: " + score, TEXT_PADDING, TEXT_PADDING, textPaint);
-	}
-
-	private void applyMovement() {
-    	xOffset -= GAME_SPEED;
+    	canvas.drawText("Speed: " + currentSpeed, TEXT_PADDING + 200, TEXT_PADDING, textPaint);
 	}
 
 	private void managePoints() {
@@ -149,12 +150,29 @@ public class GraphicsTestView  extends View {
         if(touchOne) {
             boolean lineHit = circleScanner.scanCircleAtPoint(localCache, event.getX(0), event.getY(0));
             if(lineHit) {
-                score += AWARD;
+            	if (currentSpeed < MAX_SPEED) {
+					currentSpeed += ACCELERATION;
+				}
+				score += AWARD;
                 paint.setStrokeWidth(THIN_STROKE);
                 paint.setColor(Color.MAGENTA);
                 electroPaint.setColor(Color.WHITE);
+            } else {
+            	decreaseSpeed();
             }
+        } else {
+        	decreaseSpeed();
         }
+	}
+	
+	private void decreaseSpeed() {
+		if (event != null) {
+			if (currentSpeed > 0) {
+				currentSpeed -= DECELERATION;
+			} else if (currentSpeed < DECELERATION) {
+				currentSpeed = 0;
+			}
+		}
 	}
 
 	@Override
@@ -168,7 +186,7 @@ public class GraphicsTestView  extends View {
      */
     private void movePoints() {
         for (FPoint point : points) {
-            point.x -= GAME_SPEED;
+            point.x -= currentSpeed;
         }
     }
 
