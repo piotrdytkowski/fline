@@ -59,10 +59,10 @@ public class PaintProvider {
     private static final Paint PAINT_SHIP = new Paint() {
         {
             setStyle(Paint.Style.STROKE);
-            setStrokeCap(Paint.Cap.SQUARE);
             setColor(Color.WHITE);
             setStrokeWidth(THIN_STROKE);
             setAntiAlias(true);
+            setStrokeJoin(Join.MITER);
         }
     };
     

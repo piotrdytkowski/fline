@@ -22,6 +22,7 @@ public class GraphicsTestView  extends View {
 	private static final float TEXT_PADDING = 30;
 	private static final float BORDER_PADDING = 30;
 	private static final float SHIP_DIMENSIONS = 70;
+	private static final float GRAB_DISTANCE = 100;
 
     private float xOffset;
     private int score;
@@ -64,6 +65,7 @@ public class GraphicsTestView  extends View {
 			shipX = 70;
 			shipY = canvas.getHeight() / 2;
 		}
+    	grabShip();
     	managePoints();
         drawGame(canvas);
         recalculateScore();
@@ -72,7 +74,18 @@ public class GraphicsTestView  extends View {
         invalidate();  // Force a re-draw
     }
 
-    private void manageTouchState() {
+    private void grabShip() {
+		if (touchOne) {
+			float xDistance = Math.abs(shipX - event.getX(0));
+			float yDistance = Math.abs(shipY - event.getY(0));
+			if (xDistance < GRAB_DISTANCE && yDistance < GRAB_DISTANCE) {
+				shipX = event.getX(0);
+				shipY = event.getY(0);
+			}
+		}
+	}
+
+	private void manageTouchState() {
         if(event != null) {
             if(event.getPointerCount() == 1) {
                 touchOne = true;
@@ -118,6 +131,7 @@ public class GraphicsTestView  extends View {
 		ship.lineTo(shipX - halfDim, shipY + halfDim);
 		ship.lineTo(shipX - quarterDim, shipY);
 		ship.lineTo(shipX - halfDim, shipY - halfDim);
+		ship.lineTo(shipX + halfDim, shipY);
 		canvas.drawPath(ship, paintProvider.getPaintShip());
 	}
 
