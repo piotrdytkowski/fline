@@ -21,15 +21,13 @@ public class GraphicsTestView  extends View {
     private static final int AWARD = 10;
 	private static final float TEXT_PADDING = 30;
 	private static final float BORDER_PADDING = 30;
-	private static final float SHIP_DIMENSIONS = 70;
 	private static final float GRAB_DISTANCE = 100;
 
     private float xOffset;
     private int score;
     private float currentSpeed;
-    
-    private float shipX;
-    private float shipY;
+
+    private Ship ship;
     
     private CircleScanner circleScanner;
     private TrackGenerator trackGenerator;
@@ -44,7 +42,9 @@ public class GraphicsTestView  extends View {
     private boolean touchTwo = false;
     
     List<FPoint> points = new ArrayList<FPoint>();
-    
+    private boolean shipGrabbed;
+
+    private List<Projectile> projectiles;
 
     public GraphicsTestView(Context context) {
         super(context);
@@ -61,11 +61,10 @@ public class GraphicsTestView  extends View {
     	if (localCache == null) {
 			localCache = Bitmap.createBitmap(canvas.getWidth(), canvas.getHeight(), Bitmap.Config.RGB_565);
 			localCanvas = new Canvas(localCache);
-			
-			shipX = 70;
-			shipY = canvas.getHeight() / 2;
+			ship = new Ship(new FPoint(70, canvas.getHeight()/2));;
 		}
     	grabShip();
+        fireGuns();
     	managePoints();
         drawGame(canvas);
         recalculateScore();
@@ -74,15 +73,25 @@ public class GraphicsTestView  extends View {
         invalidate();  // Force a re-draw
     }
 
+    private void fireGuns() {
+        if(touchTwo) {
+//            projectiles.add(new Projectile(,));
+        }
+    }
+
     private void grabShip() {
 		if (touchOne) {
-			float xDistance = Math.abs(shipX - event.getX(0));
-			float yDistance = Math.abs(shipY - event.getY(0));
+			float xDistance = Math.abs(ship.getLocation().x - event.getX(0));
+			float yDistance = Math.abs(ship.getLocation().y - event.getY(0));
 			if (xDistance < GRAB_DISTANCE && yDistance < GRAB_DISTANCE) {
-				shipX = event.getX(0);
-				shipY = event.getY(0);
-			}
-		}
+                ship.setLocation(new FPoint(event.getX(0), event.getY(0)));
+                shipGrabbed = true;
+			} else {
+                shipGrabbed = false;
+            }
+		} else {
+            shipGrabbed = false;
+        }
 	}
 
 	private void manageTouchState() {
@@ -109,7 +118,6 @@ public class GraphicsTestView  extends View {
 	}
 
 	private void drawGame(Canvas canvas) {
-		//canvas.setBitmap(localCache);
     	Path path = trackGenerator.generateTrack(points);
     	canvas.drawPath(path, paintProvider.getPaintStroke());
         for(int i = 0; i < 2; i++) {
@@ -118,21 +126,8 @@ public class GraphicsTestView  extends View {
     	localCanvas.drawPath(path, paintProvider.getPaintStroke());
     	canvas.drawText("Score: " + score, TEXT_PADDING, TEXT_PADDING, paintProvider.getPaintText());
     	canvas.drawText("Speed: " + currentSpeed, TEXT_PADDING + 200, TEXT_PADDING, paintProvider.getPaintText());
-    	
-    	drawShip(canvas);
-	}
+    	ship.draw(canvas, paintProvider.getPaintShip());
 
-	private void drawShip(Canvas canvas) {
-		Path ship = new Path();
-		float halfDim = SHIP_DIMENSIONS / 2;
-		float quarterDim = SHIP_DIMENSIONS / 4;
-		ship.moveTo(shipX - halfDim, shipY - halfDim);
-		ship.lineTo(shipX + halfDim, shipY);
-		ship.lineTo(shipX - halfDim, shipY + halfDim);
-		ship.lineTo(shipX - quarterDim, shipY);
-		ship.lineTo(shipX - halfDim, shipY - halfDim);
-		ship.lineTo(shipX + halfDim, shipY);
-		canvas.drawPath(ship, paintProvider.getPaintShip());
 	}
 
 	private void managePoints() {
@@ -154,7 +149,7 @@ public class GraphicsTestView  extends View {
 
 	private void recalculateScore() {
         paintProvider.deactivate();
-        if(touchOne) {
+        if(touchOne && shipGrabbed) {
             boolean lineHit = circleScanner.scanCircleAtPoint(localCache, event.getX(0), event.getY(0));
             if(lineHit) {
             	if (currentSpeed < MAX_SPEED) {
@@ -201,5 +196,16 @@ public class GraphicsTestView  extends View {
     	y = Math.max(BORDER_PADDING, y);
     	y = Math.min(this.getHeight() - BORDER_PADDING, y);
         return new FPoint(100.f+(float)(p.x + Math.random()*200), y);
+    }
+
+    private class Projectile {
+        private double angle;
+        private FPoint location;
+        private boolean friendly;
+        private Projectile(double angle, FPoint location, boolean friendly) {
+            this.angle = angle;
+            this.location = location;
+            this.friendly = friendly;
+        }
     }
 }

@@ -33,7 +33,7 @@ public class PaintProvider {
         {
             setStyle(Paint.Style.STROKE);
             setStrokeCap(Paint.Cap.ROUND);
-            setColor(Color.BLUE);
+            setColor(Color.WHITE);
             setStrokeWidth(2);
             setAntiAlias(true);
         }
@@ -42,7 +42,7 @@ public class PaintProvider {
         {
             setStyle(Paint.Style.STROKE);
             setStrokeCap(Paint.Cap.ROUND);
-            setColor(Color.WHITE);
+            setColor(Color.BLUE);
             setStrokeWidth(1);
             setAntiAlias(true);
         }
@@ -60,7 +60,7 @@ public class PaintProvider {
         {
             setStyle(Paint.Style.STROKE);
             setColor(Color.WHITE);
-            setStrokeWidth(THIN_STROKE);
+            setStrokeWidth(15);
             setAntiAlias(true);
             setStrokeJoin(Join.MITER);
         }
