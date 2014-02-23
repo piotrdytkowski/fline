@@ -20,8 +20,8 @@ public class CircleScanner {
      */
     public boolean scanCircleAtPoint(Bitmap drawingCache, float x, float y) {
         if (drawingCache != null) {
-			for (float xi = -searchRadius; xi <= searchRadius; xi++) {
-				for (float yi = -searchRadius; yi <= searchRadius; yi++) {
+			for (float xi = -searchRadius; xi <= searchRadius; xi+=5) {
+				for (float yi = -searchRadius; yi <= searchRadius; yi+=5) {
 					if (xi * xi + yi * yi <= searchRadius * searchRadius) {
 						if (getColourAtLocation(drawingCache, x + xi, y + yi) != Color.BLACK) {
 							return true;
