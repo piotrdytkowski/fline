@@ -21,12 +21,12 @@ public class GraphicsTestView extends View {
     private static final int AWARD = 10;
 	private static final float TEXT_PADDING = 30;
 	private static final float GRAB_DISTANCE = 100;
-	private static final int BULLET_TIMEOUT = 10;
+    private static final int PLAYER_DAMAGE = 50;
 
     private int score;
     private float currentSpeed;
 
-    private Ship ship;
+    private Ryder ryder;
     private Track track;
     
     private CircleScanner circleScanner;
@@ -63,7 +63,7 @@ public class GraphicsTestView extends View {
     	if (localCache == null) {
 			localCache = Bitmap.createBitmap(canvas.getWidth(), canvas.getHeight(), Bitmap.Config.RGB_565);
 			localCanvas = new Canvas(localCache);
-			ship = new Ship(new FPoint(70, canvas.getHeight()/2));;
+			ryder = new Ryder(new FPoint(70, canvas.getHeight()/2));;
 		}
     	createFlyter();
     	grabShip();
@@ -83,8 +83,8 @@ public class GraphicsTestView extends View {
 
 	private void fireGuns() {
         if(touchTwo && bulletTimeout <= 0) {
-            projectiles.add(new Projectile(new FPoint(ship.getLocation()), new FPoint(event.getX(1), event.getY(1)), true));
-            bulletTimeout = BULLET_TIMEOUT;
+            projectiles.add(new Projectile(new FPoint(ryder.getLocation()), new FPoint(event.getX(1), event.getY(1)), true, PLAYER_DAMAGE));
+            bulletTimeout = ryder.getBulletTimeout();
         }
         bulletTimeout--;
         cleanUpProjectiles();
@@ -104,10 +104,10 @@ public class GraphicsTestView extends View {
 
     private void grabShip() {
 		if (touchOne) {
-			float xDistance = Math.abs(ship.getLocation().x - event.getX(0));
-			float yDistance = Math.abs(ship.getLocation().y - event.getY(0));
+			float xDistance = Math.abs(ryder.getLocation().x - event.getX(0));
+			float yDistance = Math.abs(ryder.getLocation().y - event.getY(0));
 			if (xDistance < GRAB_DISTANCE && yDistance < GRAB_DISTANCE) {
-                ship.setLocation(new FPoint(event.getX(0), event.getY(0)));
+                ryder.setLocation(new FPoint(event.getX(0), event.getY(0)));
                 shipGrabbed = true;
 			} else {
                 shipGrabbed = false;
@@ -144,22 +144,45 @@ public class GraphicsTestView extends View {
     	track.getLineView().draw(localCanvas, paintProvider.getPaintStroke());
     	canvas.drawText("Score: " + score, TEXT_PADDING, TEXT_PADDING, paintProvider.getPaintText());
     	canvas.drawText("Speed: " + currentSpeed, TEXT_PADDING + 200, TEXT_PADDING, paintProvider.getPaintText());
-        for (Projectile projectile : projectiles) {
+    	canvas.drawText("Health: " + ryder.getHealth(), TEXT_PADDING + 500, TEXT_PADDING, paintProvider.getPaintText());
+        Iterator<Projectile> projectileIterator = projectiles.iterator();
+        while(projectileIterator.hasNext()) {
+            Projectile projectile = projectileIterator.next();
             if(projectile.isFriendly()) {
                 projectile.draw(canvas, paintProvider.getPaintProjectile());
+                for (Flyter flyter : flyters) {
+                    if(detectProjectileHit(flyter.getLocation(), 15, projectile)) {
+                        flyter.takeDamage(projectile.getDamage());
+                        projectileIterator.remove();
+                    }
+                }
+
             } else {
                 projectile.draw(canvas, paintProvider.getPaintEnemyProjectile());
+                if(detectProjectileHit(ryder.getLocation(), 20, projectile)) {
+                    ryder.takeDamage(projectile.getDamage());
+                    projectileIterator.remove();
+                }
+            }
+
+        }
+        Iterator<Flyter> iterator = flyters.iterator();
+        while(iterator.hasNext()) {
+            Flyter flyter = iterator.next();
+            flyter.draw(canvas, paintProvider.getPaintFlyter());
+            flyter.fireProjectile(ryder.getLocation());
+            if(flyter.isDead()){
+                iterator.remove();
             }
         }
-        for (Flyter flyter : flyters) {
-        	flyter.draw(canvas, paintProvider.getPaintFlyter());
-            flyter.fireProjectile(ship.getLocation());
-        }
-        ship.draw(canvas, paintProvider.getPaintShip());
-
+        ryder.draw(canvas, paintProvider.getPaintShip());
 	}
 
-	private void recalculateScore() {
+    private boolean detectProjectileHit(FPoint location, int searchRadius, Projectile projectile) {
+        return location.distance(projectile.getLocation()) < searchRadius;
+    }
+
+    private void recalculateScore() {
         paintProvider.deactivate();
         if(touchOne && shipGrabbed) {
             boolean lineHit = circleScanner.scanCircleAtPoint(localCache, event.getX(0), event.getY(0));

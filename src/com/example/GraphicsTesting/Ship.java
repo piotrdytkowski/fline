@@ -1,34 +1,15 @@
 package com.example.GraphicsTesting;
 
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Path;
 
-public class Ship implements Drawable {
-    private static final float SHIP_DIMENSIONS = 30;
-    private FPoint location;
+public abstract class Ship {
+    protected FPoint location;
+    protected int health;
+    protected int bulletTimeout;
 
-    public Ship(FPoint location) {
+    protected Ship(FPoint location, int health, int bulletTimeout) {
         this.location = location;
-    }
-
-    @Override
-    public void draw(Canvas canvas, Paint paint) {
-        Path ship = new Path();
-        float halfDim = SHIP_DIMENSIONS / 2;
-        float quarterDim = SHIP_DIMENSIONS / 4;
-        ship.moveTo(location.x - halfDim, location.y - halfDim);
-        ship.lineTo(location.x + halfDim, location.y);
-        ship.lineTo(location.x - halfDim, location.y + halfDim);
-        ship.lineTo(location.x - quarterDim, location.y);
-        ship.lineTo(location.x - halfDim, location.y - halfDim);
-        ship.lineTo(location.x + halfDim, location.y);
-        canvas.drawPath(ship, paint);
-    }
-
-    @Override
-    public int getIndex() {
-        return DrawingDepth.FOREGROUND.getIndex();
+        this.health = health;
+        this.bulletTimeout = bulletTimeout;
     }
 
     public FPoint getLocation() {
@@ -37,5 +18,21 @@ public class Ship implements Drawable {
 
     public void setLocation(FPoint location) {
         this.location = location;
+    }
+
+    public void takeDamage(int damage) {
+        health -= (damage > health ? health : damage);
+    }
+
+    public int getHealth() {
+        return health;
+    }
+
+    public boolean isDead() {
+        return health <= 0;
+    }
+
+    public int getBulletTimeout() {
+        return bulletTimeout;
     }
 }

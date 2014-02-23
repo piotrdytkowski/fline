@@ -6,21 +6,20 @@ import android.graphics.Path;
 
 import java.util.List;
 
-public class Flyter implements Drawable {
+public class Flyter extends Ship implements Drawable {
 
     private static final float DIMENSION = 20;
     private static final float SPEED = 6;
     private static final int BULLET_TIMEOUT = 20;
+    private static final int FLYTER_DAMAGE = 5;
+    private static final int FLYTER_MAX_HEALTH = 100;
 
     private List<Projectile> projectiles;
-    private FPoint location;
     private FPoint destination;
-    private int health;
-    private int bulletTimeout;
 
     public Flyter(List<Projectile> projectiles, FPoint location) {
+        super(location, FLYTER_MAX_HEALTH, BULLET_TIMEOUT);
         this.projectiles = projectiles;
-        this.location = location;
 	}
 
 	@Override
@@ -41,7 +40,7 @@ public class Flyter implements Drawable {
 
     public void fireProjectile(FPoint target) {
         if(bulletTimeout <= 0) {
-            projectiles.add(new Projectile(new FPoint(location), target, false));
+            projectiles.add(new Projectile(new FPoint(location), target, false, FLYTER_DAMAGE));
             bulletTimeout = BULLET_TIMEOUT;
         }
         bulletTimeout--;
@@ -62,5 +61,4 @@ public class Flyter implements Drawable {
 	public int getIndex() {
 		return DrawingDepth.FOREGROUND.getIndex();
 	}
-
 }

@@ -11,9 +11,11 @@ public class Projectile implements Drawable {
     private FPoint location;
     private double angle;
     private boolean friendly;
+    private int damage;
 
-    public Projectile(FPoint location, FPoint target, boolean friendly) {
+    public Projectile(FPoint location, FPoint target, boolean friendly, int damage) {
         this.location = location;
+        this.damage = damage;
         recalculateAngle(target);
         this.friendly = friendly;
     }
@@ -42,5 +44,9 @@ public class Projectile implements Drawable {
 
     public boolean isFriendly() {
         return friendly;
+    }
+
+    public int getDamage() {
+        return damage;
     }
 }
