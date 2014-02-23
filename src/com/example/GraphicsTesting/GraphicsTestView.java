@@ -7,6 +7,8 @@ import android.graphics.Color;
 import android.view.MotionEvent;
 import android.view.View;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class GraphicsTestView extends View {
@@ -19,6 +21,7 @@ public class GraphicsTestView extends View {
     private static final int AWARD = 10;
 	private static final float TEXT_PADDING = 30;
 	private static final float GRAB_DISTANCE = 100;
+	private static final int BULLET_TIMEOUT = 10;
 
     private int score;
     private float currentSpeed;
@@ -40,6 +43,7 @@ public class GraphicsTestView extends View {
     private boolean shipGrabbed;
 
     private List<Projectile> projectiles;
+    private int bulletTimeout = 0;
 
     public GraphicsTestView(Context context) {
         super(context);
@@ -47,6 +51,7 @@ public class GraphicsTestView extends View {
         paintProvider = new PaintProvider();
         currentSpeed = START_GAME_SPEED;
         track = new Track();
+        projectiles = new ArrayList<Projectile>();
     }
 
     // Called back to draw the view. Also called by invalidate().
@@ -68,9 +73,24 @@ public class GraphicsTestView extends View {
     }
 
     private void fireGuns() {
-        if(touchTwo) {
-//            projectiles.add(new Projectile(,));
+        if(touchTwo && bulletTimeout <= 0) {
+            projectiles.add(new Projectile(new FPoint(ship.getLocation()), new FPoint(event.getX(1), event.getY(1)), true));
+            bulletTimeout = BULLET_TIMEOUT;
         }
+        bulletTimeout--;
+        cleanUpProjectiles();
+    }
+
+    private void cleanUpProjectiles() {
+        Iterator<Projectile> iterator = projectiles.iterator();
+        while(iterator.hasNext()) {
+            Projectile next = iterator.next();
+            if(next.getLocation().x > getWidth() || next.getLocation().x < 0
+                    || next.getLocation().y > getHeight() || next.getLocation().y < 0) {
+                iterator.remove();
+            }
+        }
+
     }
 
     private void grabShip() {
@@ -117,7 +137,11 @@ public class GraphicsTestView extends View {
     	track.getLineView().draw(localCanvas, paintProvider.getPaintStroke());
     	canvas.drawText("Score: " + score, TEXT_PADDING, TEXT_PADDING, paintProvider.getPaintText());
     	canvas.drawText("Speed: " + currentSpeed, TEXT_PADDING + 200, TEXT_PADDING, paintProvider.getPaintText());
-    	ship.draw(canvas, paintProvider.getPaintShip());
+        for (Projectile projectile : projectiles) {
+            projectile.draw(canvas, paintProvider.getPaintProjectile());
+        }
+
+        ship.draw(canvas, paintProvider.getPaintShip());
 
 	}
 
@@ -155,14 +179,4 @@ public class GraphicsTestView extends View {
         return super.onTouchEvent(event);
     }
 
-    private class Projectile {
-        private double angle;
-        private FPoint location;
-        private boolean friendly;
-        private Projectile(double angle, FPoint location, boolean friendly) {
-            this.angle = angle;
-            this.location = location;
-            this.friendly = friendly;
-        }
-    }
 }
