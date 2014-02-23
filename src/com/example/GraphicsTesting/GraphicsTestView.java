@@ -76,7 +76,7 @@ public class GraphicsTestView extends View {
     }
 
     private void createFlyter() {
-		if (Math.random() < 0.001) {
+		if (Math.random() < 0.005) {
 			flyters.add(new Flyter(projectiles, new FPoint(this.getWidth() + 100, this.getHeight() / 2)));
 		}
 	}
@@ -123,10 +123,7 @@ public class GraphicsTestView extends View {
                 touchOne = true;
                 touchTwo = false;
             } else if(event.getPointerCount() >= 2) {
-                touchTwo = true;
-                if(event.getAction() == MotionEvent.ACTION_POINTER_2_UP) {
-                    touchTwo = false;
-                }
+                touchTwo = event.getAction() != MotionEvent.ACTION_POINTER_2_UP;
             }
             if(event.getAction() == MotionEvent.ACTION_UP) {
                 touchOne = false;
@@ -151,12 +148,12 @@ public class GraphicsTestView extends View {
             if(projectile.isFriendly()) {
                 projectile.draw(canvas, paintProvider.getPaintProjectile());
                 for (Flyter flyter : flyters) {
-                    if(detectProjectileHit(flyter.getLocation(), 15, projectile)) {
+                    if(detectProjectileHit(flyter.getLocation(), 40, projectile)) {
                         flyter.takeDamage(projectile.getDamage());
                         projectileIterator.remove();
+                        break;
                     }
                 }
-
             } else {
                 projectile.draw(canvas, paintProvider.getPaintEnemyProjectile());
                 if(detectProjectileHit(ryder.getLocation(), 20, projectile)) {
@@ -164,7 +161,6 @@ public class GraphicsTestView extends View {
                     projectileIterator.remove();
                 }
             }
-
         }
         Iterator<Flyter> iterator = flyters.iterator();
         while(iterator.hasNext()) {

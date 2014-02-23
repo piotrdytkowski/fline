@@ -8,9 +8,9 @@ import java.util.List;
 
 public class Flyter extends Ship implements Drawable {
 
-    private static final float DIMENSION = 20;
-    private static final float SPEED = 6;
-    private static final int BULLET_TIMEOUT = 20;
+    private static final float DIMENSION = 40;
+    private static final float SPEED = 3;
+    private static final int BULLET_TIMEOUT = 30;
     private static final int FLYTER_DAMAGE = 5;
     private static final int FLYTER_MAX_HEALTH = 100;
 
@@ -47,13 +47,19 @@ public class Flyter extends Ship implements Drawable {
     }
 
     private void moveFlyter(int width, int height) {
-		if (destination == null || location.distance(destination) <= SPEED) {
-			createNextDestination(width, height);
-		}
-		location.move(destination, SPEED);
+		if (destination == null) {
+            if(Math.random() < 0.05) {
+                createNextDestination(width, height);
+            }
+		} else {
+		    location.move(destination, SPEED);
+        }
+        if (destination != null && location.distance(destination) <= SPEED) {
+            destination = null;
+        }
 	}
 
-	private void createNextDestination(int width, int height) {
+    private void createNextDestination(int width, int height) {
 		destination = FPoint.randomPoint(width / 2, 0, width, height);
 	}
 
