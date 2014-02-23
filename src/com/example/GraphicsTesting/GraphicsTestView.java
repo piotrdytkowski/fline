@@ -77,7 +77,7 @@ public class GraphicsTestView extends View {
 
     private void createFlyter() {
 		if (Math.random() < 0.001) {
-			flyters.add(new Flyter(new FPoint(this.getWidth() + 100, this.getHeight() / 2)));
+			flyters.add(new Flyter(projectiles, new FPoint(this.getWidth() + 100, this.getHeight() / 2)));
 		}
 	}
 
@@ -145,10 +145,15 @@ public class GraphicsTestView extends View {
     	canvas.drawText("Score: " + score, TEXT_PADDING, TEXT_PADDING, paintProvider.getPaintText());
     	canvas.drawText("Speed: " + currentSpeed, TEXT_PADDING + 200, TEXT_PADDING, paintProvider.getPaintText());
         for (Projectile projectile : projectiles) {
-            projectile.draw(canvas, paintProvider.getPaintProjectile());
+            if(projectile.isFriendly()) {
+                projectile.draw(canvas, paintProvider.getPaintProjectile());
+            } else {
+                projectile.draw(canvas, paintProvider.getPaintEnemyProjectile());
+            }
         }
         for (Flyter flyter : flyters) {
         	flyter.draw(canvas, paintProvider.getPaintFlyter());
+            flyter.fireProjectile(ship.getLocation());
         }
         ship.draw(canvas, paintProvider.getPaintShip());
 

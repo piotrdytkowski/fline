@@ -69,7 +69,7 @@ public class PaintProvider {
         {
             setStyle(Paint.Style.STROKE);
             setColor(Color.RED);
-            setStrokeWidth(5);
+            setStrokeWidth(2);
             setAntiAlias(true);
             setStrokeJoin(Join.MITER);
         }
@@ -82,11 +82,19 @@ public class PaintProvider {
             setAntiAlias(true);
         }
     };
-    
+    private static final Paint PAINT_FLYTER_PROJECTILE = new Paint() {
+        {
+            setStyle(Paint.Style.STROKE);
+            setColor(Color.YELLOW);
+            setStrokeWidth(3);
+            setAntiAlias(true);
+        }
+    };
+
 	public void deactivate() {
 		paintStroke = PAINT_STROKE_INACTIVE;
         paintElectro = PAINT_ELECTRO_INACTIVE;
-	};
+	}
     
 	public void activate() {
 		paintStroke = PAINT_STROKE_ACTIVE;
@@ -111,7 +119,11 @@ public class PaintProvider {
         return PAINT_PROJECTILE;
     }
 
-	public Paint getPaintFlyter() {
+    public Paint getPaintEnemyProjectile() {
+        return PAINT_FLYTER_PROJECTILE;
+    }
+
+    public Paint getPaintFlyter() {
 		return PAINT_FLYTER;
 	}
 }

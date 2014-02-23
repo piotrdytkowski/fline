@@ -23,21 +23,19 @@ public class FPoint {
 	}
 	
 	public void move(FPoint target, float speed) {
-		FPoint p = moveTowards(this, target, speed);
-		this.x = p.x;
-		this.y = p.y;
+        double deltaY = target.y - this.y;
+        double deltaX = target.x - this.x;
+        double angle = Math.atan2(deltaY, deltaX) * 180 / Math.PI;
+        move(angle, speed);
 	}
-	
-	public void move(float xProportion, float yProportion, float speed) {
-		x += speed * xProportion;
-        y += speed * yProportion;
-	}
-	
-	public static FPoint moveTowards(FPoint location, FPoint target, float speed) {
-		float x = target.x - location.x;
-		float y = target.y - location.y;
-		float z = (float)Math.sqrt(x*x + y*y);
-		float proportion = speed / z;
-		return new FPoint(location.x + x * proportion, location.y + y * proportion);
-	}
+
+    public void move(double angle, float distance) {
+        this.x += distance * Math.cos(Math.toRadians(angle));
+        this.y += distance * Math.sin(Math.toRadians(angle));
+    }
+
+    public static FPoint moveTowards(FPoint location, double angle, float distance) {
+        return  new FPoint((float)(location.x + distance * Math.cos(Math.toRadians(angle))),
+                (float)(location.y + distance * Math.sin(Math.toRadians(angle))));
+    }
 }

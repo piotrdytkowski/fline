@@ -9,22 +9,26 @@ public class Projectile implements Drawable {
     public static final int SPEED = 10;
     private static final float LENGTH = 20;
     private FPoint location;
-    private FPoint target;
+    private double angle;
     private boolean friendly;
 
     public Projectile(FPoint location, FPoint target, boolean friendly) {
         this.location = location;
-        this.target = target;
+        recalculateAngle(target);
         this.friendly = friendly;
+    }
+
+    private void recalculateAngle(FPoint target) {
+        double deltaY = target.y - location.y;
+        double deltaX = target.x - location.x;
+        this.angle = Math.atan2(deltaY, deltaX) * 180 / Math.PI;
     }
 
     @Override
     public void draw(Canvas canvas, Paint paint) {
-        FPoint end = FPoint.moveTowards(location, target, LENGTH);
+        FPoint end = FPoint.moveTowards(location, angle, LENGTH);
         canvas.drawLine(location.x, location.y, end.x, end.y, paint);
-        target.x = target.x + (end.x - location.x);
-        target.y = target.y + (end.y - location.y);
-        location.move(target, SPEED);
+        location.move(angle, SPEED);
     }
 
     @Override
@@ -34,5 +38,9 @@ public class Projectile implements Drawable {
 
     public FPoint getLocation() {
         return location;
+    }
+
+    public boolean isFriendly() {
+        return friendly;
     }
 }
