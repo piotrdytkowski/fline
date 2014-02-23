@@ -65,7 +65,15 @@ public class PaintProvider {
             setStrokeJoin(Join.MITER);
         }
     };
-
+    private static final Paint PAINT_FLYTER = new Paint() {
+        {
+            setStyle(Paint.Style.STROKE);
+            setColor(Color.RED);
+            setStrokeWidth(5);
+            setAntiAlias(true);
+            setStrokeJoin(Join.MITER);
+        }
+    };
     private static final Paint PAINT_PROJECTILE = new Paint() {
         {
             setStyle(Paint.Style.STROKE);
@@ -102,4 +110,8 @@ public class PaintProvider {
     public Paint getPaintProjectile() {
         return PAINT_PROJECTILE;
     }
+
+	public Paint getPaintFlyter() {
+		return PAINT_FLYTER;
+	}
 }

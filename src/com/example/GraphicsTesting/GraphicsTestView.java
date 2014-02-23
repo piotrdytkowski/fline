@@ -17,7 +17,7 @@ public class GraphicsTestView extends View {
     private static final float START_GAME_SPEED = 5;
     private static final float MAX_SPEED = 20;
     private static final float ACCELERATION = .05f;
-    private static final float DECELERATION = .5f;
+    private static final float DECELERATION = .1f;
     private static final int AWARD = 10;
 	private static final float TEXT_PADDING = 30;
 	private static final float GRAB_DISTANCE = 100;
@@ -43,6 +43,7 @@ public class GraphicsTestView extends View {
     private boolean shipGrabbed;
 
     private List<Projectile> projectiles;
+    private List<Flyter> flyters;
     private int bulletTimeout = 0;
 
     public GraphicsTestView(Context context) {
@@ -52,6 +53,7 @@ public class GraphicsTestView extends View {
         currentSpeed = START_GAME_SPEED;
         track = new Track();
         projectiles = new ArrayList<Projectile>();
+        flyters = new ArrayList<Flyter>();
     }
 
     // Called back to draw the view. Also called by invalidate().
@@ -63,6 +65,7 @@ public class GraphicsTestView extends View {
 			localCanvas = new Canvas(localCache);
 			ship = new Ship(new FPoint(70, canvas.getHeight()/2));;
 		}
+    	createFlyter();
     	grabShip();
         fireGuns();
         drawGame(canvas);
@@ -72,7 +75,13 @@ public class GraphicsTestView extends View {
         invalidate();  // Force a re-draw
     }
 
-    private void fireGuns() {
+    private void createFlyter() {
+		if (Math.random() < 0.001) {
+			flyters.add(new Flyter(new FPoint(this.getWidth() + 100, this.getHeight() / 2)));
+		}
+	}
+
+	private void fireGuns() {
         if(touchTwo && bulletTimeout <= 0) {
             projectiles.add(new Projectile(new FPoint(ship.getLocation()), new FPoint(event.getX(1), event.getY(1)), true));
             bulletTimeout = BULLET_TIMEOUT;
@@ -116,12 +125,10 @@ public class GraphicsTestView extends View {
             } else if(event.getPointerCount() >= 2) {
                 touchTwo = true;
                 if(event.getAction() == MotionEvent.ACTION_POINTER_2_UP) {
-                    System.out.println("Second touch up!");
                     touchTwo = false;
                 }
             }
             if(event.getAction() == MotionEvent.ACTION_UP) {
-                System.out.println("First touch up!");
                 touchOne = false;
             }
         }
@@ -140,7 +147,9 @@ public class GraphicsTestView extends View {
         for (Projectile projectile : projectiles) {
             projectile.draw(canvas, paintProvider.getPaintProjectile());
         }
-
+        for (Flyter flyter : flyters) {
+        	flyter.draw(canvas, paintProvider.getPaintFlyter());
+        }
         ship.draw(canvas, paintProvider.getPaintShip());
 
 	}
