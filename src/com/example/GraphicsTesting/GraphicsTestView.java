@@ -71,6 +71,8 @@ public class GraphicsTestView extends View {
     	flyters = new ArrayList<Flyter>();
     	gameOver = false;
     	event = null;
+    	touchOne = false;
+    	touchTwo = false;
     }
 
     // Called back to draw the view. Also called by invalidate().
