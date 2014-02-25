@@ -73,6 +73,7 @@ public class GraphicsTestView extends View {
     	event = null;
     	touchOne = false;
     	touchTwo = false;
+    	lineHit = false;
     }
 
     // Called back to draw the view. Also called by invalidate().
@@ -85,6 +86,7 @@ public class GraphicsTestView extends View {
 			localCanvas = new Canvas(localCache);
 			ryder = new Ryder(new FPoint(70, canvas.getHeight()/2));;
 		}
+    	checkPlayerDead();
     	createFlyter();
     	grabShip();
         fireGuns();
@@ -92,7 +94,7 @@ public class GraphicsTestView extends View {
         recalculateScore();
         cleanLocalCache();
         track.movePoints(currentSpeed);
-        checkPlayerDead();
+        
         if (!gameOver) {
 			invalidate(); // Force a re-draw
 		}
