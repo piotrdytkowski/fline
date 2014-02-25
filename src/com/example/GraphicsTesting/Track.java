@@ -24,7 +24,8 @@ public class Track {
 
     private void managePoints(int width, int height) {
         if (points.size() == 0) {
-            points.add(createPoint(height, new FPoint(width, height / 2)));
+            points.add(new FPoint(0, height / 2));
+            points.add(new FPoint(width, height / 2));
         }
 
         FPoint lastPoint = points.get(points.size()-1);

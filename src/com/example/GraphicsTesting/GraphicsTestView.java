@@ -1,14 +1,20 @@
 package com.example.GraphicsTesting;
 
-import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.*;
-import android.view.MotionEvent;
-import android.view.View;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.view.MotionEvent;
+import android.view.View;
 
 public class GraphicsTestView extends View {
 
@@ -29,7 +35,6 @@ public class GraphicsTestView extends View {
     private Track track;
     
     private CircleScanner circleScanner;
-    private PaintProvider paintProvider;
     
     private Bitmap localCache;
     private Canvas localCanvas;
@@ -41,6 +46,8 @@ public class GraphicsTestView extends View {
 
     private boolean shipGrabbed;
     private boolean lineHit = false;
+    
+    private boolean gameOver = false;
 
     private List<Projectile> projectiles;
     private List<Flyter> flyters;
@@ -53,11 +60,17 @@ public class GraphicsTestView extends View {
         Resources res = getResources();
         speedometer = new Speedometer(BitmapFactory.decodeResource(res, R.drawable.speedometer), MAX_SPEED);
         circleScanner = new CircleScanner(40);
-        paintProvider = new PaintProvider();
-        currentSpeed = START_GAME_SPEED;
-        track = new Track();
-        projectiles = new ArrayList<Projectile>();
-        flyters = new ArrayList<Flyter>();
+        init();
+    }
+    
+    private void init() {
+    	score = 0;
+    	currentSpeed = START_GAME_SPEED;
+    	track = new Track();
+    	projectiles = new ArrayList<Projectile>();
+    	flyters = new ArrayList<Flyter>();
+    	gameOver = false;
+    	event = null;
     }
 
     // Called back to draw the view. Also called by invalidate().
@@ -77,10 +90,31 @@ public class GraphicsTestView extends View {
         recalculateScore();
         cleanLocalCache();
         track.movePoints(currentSpeed);
-        invalidate();  // Force a re-draw
+        checkPlayerDead();
+        if (!gameOver) {
+			invalidate(); // Force a re-draw
+		}
     }
 
-    private void createFlyter() {
+    private void checkPlayerDead() {
+		if (ryder.isDead()) {
+			gameOver = true;
+			AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext());
+			builder.setMessage("Game Over")
+			.setPositiveButton("Restart", new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					localCache = null;
+					init();
+					GraphicsTestView.this.invalidate();
+				}
+			});
+			AlertDialog dialog = builder.create();
+			dialog.show();
+		}
+	}
+
+	private void createFlyter() {
 		if (Math.random() < 0.005) {
 			flyters.add(new Flyter(projectiles, new FPoint(this.getWidth() + 100, this.getHeight() / 2)));
 		}
