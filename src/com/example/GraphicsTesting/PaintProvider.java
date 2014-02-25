@@ -114,6 +114,15 @@ public class PaintProvider {
             setAntiAlias(true);
         }
     };
+    public static final Paint PAINT_NEEDLE = new Paint() {
+        {
+            setStyle(Paint.Style.STROKE);
+            setColor(Color.RED);
+            setStrokeWidth(2);
+            setAntiAlias(true);
+        }
+    };
+
 
 
     public static Paint activePaint(float speed, float maxSpeed) {

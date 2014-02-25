@@ -51,7 +51,7 @@ public class GraphicsTestView extends View {
     public GraphicsTestView(Context context) {
         super(context);
         Resources res = getResources();
-        speedometer = new Speedometer(BitmapFactory.decodeResource(res, R.drawable.speedometer));
+        speedometer = new Speedometer(BitmapFactory.decodeResource(res, R.drawable.speedometer), MAX_SPEED);
         circleScanner = new CircleScanner(40);
         paintProvider = new PaintProvider();
         currentSpeed = START_GAME_SPEED;
@@ -63,6 +63,7 @@ public class GraphicsTestView extends View {
     // Called back to draw the view. Also called by invalidate().
     @Override
     protected void onDraw(Canvas canvas) {
+        speedometer.setSpeed(currentSpeed);
         manageTouchState();
     	if (localCache == null) {
 			localCache = Bitmap.createBitmap(canvas.getWidth(), canvas.getHeight(), Bitmap.Config.RGB_565);
@@ -152,7 +153,7 @@ public class GraphicsTestView extends View {
     	track.getLineView().draw(canvas, linePaint);
     	track.getElectroView().draw(canvas, electroPaint);
     	track.getLineView().draw(localCanvas, linePaint);
-        speedometer.draw(canvas, null);
+        speedometer.draw(canvas, PaintProvider.PAINT_NEEDLE);
     	canvas.drawText("Score: " + score, TEXT_PADDING, TEXT_PADDING, PaintProvider.PAINT_TEXT);
     	canvas.drawText("Speed: " + currentSpeed, TEXT_PADDING + 200, TEXT_PADDING, PaintProvider.PAINT_TEXT);
     	canvas.drawText("Health: " + ryder.getHealth(), TEXT_PADDING + 500, TEXT_PADDING, PaintProvider.PAINT_TEXT);
