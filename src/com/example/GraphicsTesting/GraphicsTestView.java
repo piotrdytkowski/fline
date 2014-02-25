@@ -193,8 +193,7 @@ public class GraphicsTestView extends View {
     	track.getLineView().draw(localCanvas, linePaint);
         speedometer.draw(canvas, PaintProvider.PAINT_NEEDLE);
     	canvas.drawText("Score: " + score, TEXT_PADDING, TEXT_PADDING, PaintProvider.PAINT_TEXT);
-    	canvas.drawText("Speed: " + currentSpeed, TEXT_PADDING + 200, TEXT_PADDING, PaintProvider.PAINT_TEXT);
-    	canvas.drawText("Health: " + ryder.getHealth(), TEXT_PADDING + 500, TEXT_PADDING, PaintProvider.PAINT_TEXT);
+    	canvas.drawText("Health: " + ryder.getHealth(), TEXT_PADDING + 200, TEXT_PADDING, PaintProvider.PAINT_TEXT);
         Iterator<Projectile> projectileIterator = projectiles.iterator();
         while(projectileIterator.hasNext()) {
             Projectile projectile = projectileIterator.next();
