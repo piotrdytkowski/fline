@@ -10,19 +10,27 @@ public class Speedometer implements Drawable {
 
     private float speed;
     private float maxSpeed;
+    private int width;
+    private int height;
 
     public Speedometer(Bitmap speedometerImage, float maxSpeed) {
         this.maxSpeed = maxSpeed;
-        this.speedometerImage = Bitmap.createScaledBitmap(speedometerImage,200,124, false);
+        this.speedometerImage = speedometerImage;
     }
 
     @Override
     public void draw(Canvas canvas, Paint paint) {
+    	if (width == 0) {
+    		width = (int)(canvas.getWidth() * .15);
+    		height = (int)(width * .62);
+    		speedometerImage = Bitmap.createScaledBitmap(speedometerImage,width, height, false);
+    	}
     	int leftX = (int)(canvas.getWidth() * .85);
     	int topY = (int)(canvas.getHeight() * .01);
         canvas.drawBitmap(speedometerImage, leftX, topY, paint);
-        FPoint endPoint = (new FPoint(leftX + 95, topY + 100)).move((speed / maxSpeed) * 180 + 180, 80);
-        canvas.drawLine(leftX + 95, topY + 100, endPoint.x, endPoint.y, paint);
+        int needleY = (int)(topY + height * .8);
+        FPoint endPoint = (new FPoint(leftX + width / 2, needleY)).move((speed / maxSpeed) * 180 + 180, (int)(height * .7));
+        canvas.drawLine(leftX + width / 2, needleY, endPoint.x, endPoint.y, paint);
     }
 
     @Override
