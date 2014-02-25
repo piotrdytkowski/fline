@@ -7,29 +7,53 @@ public class PaintProvider {
 	
 	public static final float THICK_STROKE = 30;
 	public static final float THIN_STROKE = 20;
-	
-	private Paint paintStroke = PAINT_STROKE_INACTIVE;
-    private Paint paintElectro = PAINT_ELECTRO_INACTIVE;
 
-	private static final Paint PAINT_STROKE_INACTIVE = new Paint() {
+    public static final Paint PAINT_STROKE_INACTIVE = new Paint() {
         {
             setStyle(Paint.Style.STROKE);
             setStrokeCap(Paint.Cap.ROUND);
-            setColor(Color.GREEN);
+            setColor(Color.GRAY);
             setStrokeWidth(THICK_STROKE);
             setAntiAlias(true);
         }
     };
-    private static final Paint PAINT_STROKE_ACTIVE = new Paint() {
+    public static final Paint PAINT_STROKE_ACTIVE_SLOW = new Paint() {
         {
             setStyle(Paint.Style.STROKE);
             setStrokeCap(Paint.Cap.ROUND);
-            setColor(Color.MAGENTA);
+            setColor(Color.RED);
             setStrokeWidth(THIN_STROKE);
             setAntiAlias(true);
         }
     };
-    private static final Paint PAINT_ELECTRO_ACTIVE = new Paint() {
+    public static final Paint PAINT_STROKE_ACTIVE_MEDIUM = new Paint() {
+        {
+            setStyle(Paint.Style.STROKE);
+            setStrokeCap(Paint.Cap.ROUND);
+            setColor(Color.YELLOW);
+            setStrokeWidth(THIN_STROKE);
+            setAntiAlias(true);
+        }
+    };
+    public static final Paint PAINT_STROKE_ACTIVE_HIGH = new Paint() {
+        {
+            setStyle(Paint.Style.STROKE);
+            setStrokeCap(Paint.Cap.ROUND);
+            setColor(Color.GREEN);
+            setStrokeWidth(THIN_STROKE);
+            setAntiAlias(true);
+        }
+    };
+    public static final Paint PAINT_STROKE_ACTIVE_ULTRA = new Paint() {
+        {
+            setStyle(Paint.Style.STROKE);
+            setStrokeCap(Paint.Cap.ROUND);
+            setColor(Color.BLUE);
+            setStrokeWidth(THIN_STROKE);
+            setAntiAlias(true);
+        }
+    };
+    public static final Paint PAINT_ELECTRO_ACTIVE = new Paint() {
         {
             setStyle(Paint.Style.STROKE);
             setStrokeCap(Paint.Cap.ROUND);
@@ -38,7 +62,7 @@ public class PaintProvider {
             setAntiAlias(true);
         }
     };
-    private static final Paint PAINT_ELECTRO_INACTIVE = new Paint() {
+    public static final Paint PAINT_ELECTRO_INACTIVE = new Paint() {
         {
             setStyle(Paint.Style.STROKE);
             setStrokeCap(Paint.Cap.ROUND);
@@ -47,7 +71,7 @@ public class PaintProvider {
             setAntiAlias(true);
         }
     };
-    private static final Paint PAINT_TEXT = new Paint() {
+    public static final Paint PAINT_TEXT = new Paint() {
         {
             setStyle(Paint.Style.STROKE);
             setColor(Color.MAGENTA);
@@ -56,7 +80,7 @@ public class PaintProvider {
             setTextSize(30);
         }
     };
-    private static final Paint PAINT_SHIP = new Paint() {
+    public static final Paint PAINT_RYDER = new Paint() {
         {
             setStyle(Paint.Style.STROKE);
             setColor(Color.WHITE);
@@ -65,7 +89,7 @@ public class PaintProvider {
             setStrokeJoin(Join.MITER);
         }
     };
-    private static final Paint PAINT_FLYTER = new Paint() {
+    public static final Paint PAINT_FLYTER = new Paint() {
         {
             setStyle(Paint.Style.STROKE);
             setColor(Color.RED);
@@ -74,7 +98,7 @@ public class PaintProvider {
             setStrokeJoin(Join.MITER);
         }
     };
-    private static final Paint PAINT_PROJECTILE = new Paint() {
+    public static final Paint PAINT_PROJECTILE = new Paint() {
         {
             setStyle(Paint.Style.STROKE);
             setColor(Color.WHITE);
@@ -82,7 +106,7 @@ public class PaintProvider {
             setAntiAlias(true);
         }
     };
-    private static final Paint PAINT_FLYTER_PROJECTILE = new Paint() {
+    public static final Paint PAINT_FLYTER_PROJECTILE = new Paint() {
         {
             setStyle(Paint.Style.STROKE);
             setColor(Color.YELLOW);
@@ -91,39 +115,21 @@ public class PaintProvider {
         }
     };
 
-	public void deactivate() {
-		paintStroke = PAINT_STROKE_INACTIVE;
-        paintElectro = PAINT_ELECTRO_INACTIVE;
-	}
-    
-	public void activate() {
-		paintStroke = PAINT_STROKE_ACTIVE;
-        paintElectro = PAINT_ELECTRO_ACTIVE;
-	}
 
-	public Paint getPaintStroke() {
-		return paintStroke;
-	}
-
-	public Paint getPaintElectro() {
-		return paintElectro;
-	}
-	
-	public Paint getPaintText() {
-		return PAINT_TEXT;
-	}
-	public Paint getPaintShip() {
-		return PAINT_SHIP;
-	}
-    public Paint getPaintProjectile() {
-        return PAINT_PROJECTILE;
+    public static Paint activePaint(float speed, float maxSpeed) {
+        float speedPercent = speed / maxSpeed;
+        if(speedPercent < 0.25) {
+            return PAINT_STROKE_ACTIVE_SLOW;
+        } else if(speedPercent < 0.5) {
+            return PAINT_STROKE_ACTIVE_MEDIUM;
+        } else if(speedPercent < 0.75) {
+            return PAINT_STROKE_ACTIVE_HIGH;
+        } else {
+            return PAINT_STROKE_ACTIVE_ULTRA;
+        }
     }
 
-    public Paint getPaintEnemyProjectile() {
-        return PAINT_FLYTER_PROJECTILE;
+    public static Paint inactivePaint() {
+        return PAINT_STROKE_INACTIVE;
     }
-
-    public Paint getPaintFlyter() {
-		return PAINT_FLYTER;
-	}
 }
