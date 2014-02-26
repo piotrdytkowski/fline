@@ -225,10 +225,11 @@ public class GraphicsTestView extends View {
         }
         Iterator<Ship> iterator = enemyShips.iterator();
         while(iterator.hasNext()) {
-            Ship flyter = iterator.next();
-            flyter.draw(canvas, PaintProvider.PAINT_FLYTER);
-            if(flyter.isDead()){
+            Ship ship = iterator.next();
+            if(ship.isDead() || ship.isOffScreen()){
                 iterator.remove();
+            } else {
+            	ship.draw(canvas, PaintProvider.PAINT_FLYTER);
             }
         }
         ryder.draw(canvas, PaintProvider.PAINT_RYDER);

@@ -10,7 +10,7 @@ import com.flyne.FPoint;
 public class Flyekazee extends Ship implements Drawable {
 	
 	private static final float DIMENSION = 80;
-    private static final float SPEED = 3;
+    private static final float SPEED = 10;
     private static final int MAX_HEALTH = 150;
 
 	public Flyekazee(FPoint location) {

@@ -38,4 +38,8 @@ public abstract class Ship implements Drawable {
     public int getBulletTimeout() {
         return bulletTimeout;
     }
+    
+    public boolean isOffScreen() {
+    	return location.x < -100;
+    }
 }
