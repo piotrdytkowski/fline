@@ -104,7 +104,8 @@ public class GraphicsTestView extends View {
 		if (ryder.isDead() || currentSpeed < 0.01) {
 			gameOver = true;
 			AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext());
-			builder.setMessage("Game Over")
+			String message = ryder.isDead() ? "Game Over. You were destroyed." : "Game Over. You dropped. Keep flyin!";
+			builder.setMessage(message)
 			.setPositiveButton("Restart", new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
