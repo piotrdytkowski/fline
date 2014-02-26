@@ -101,7 +101,7 @@ public class GraphicsTestView extends View {
     }
 
     private void checkPlayerDead() {
-		if (ryder.isDead()) {
+		if (ryder.isDead() || currentSpeed < 0.01) {
 			gameOver = true;
 			AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext());
 			builder.setMessage("Game Over")
@@ -218,7 +218,7 @@ public class GraphicsTestView extends View {
         while(iterator.hasNext()) {
             Flyter flyter = iterator.next();
             flyter.draw(canvas, PaintProvider.PAINT_FLYTER);
-            flyter.fireProjectile(ryder.getLocation());
+            flyter.fireProjectile();
             if(flyter.isDead()){
                 iterator.remove();
             }

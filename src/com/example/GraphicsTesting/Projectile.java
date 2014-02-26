@@ -19,6 +19,13 @@ public class Projectile implements Drawable {
         recalculateAngle(target);
         this.friendly = friendly;
     }
+    
+    public Projectile(FPoint location, float angle, boolean friendly, int damage) {
+    	this.location = location;
+        this.damage = damage;
+        this.angle = angle;
+        this.friendly = friendly;
+    }
 
     private void recalculateAngle(FPoint target) {
         double deltaY = target.y - location.y;

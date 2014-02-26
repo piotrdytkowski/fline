@@ -10,7 +10,7 @@ public class Flyter extends Ship implements Drawable {
 
     private static final float DIMENSION = 40;
     private static final float SPEED = 3;
-    private static final int BULLET_TIMEOUT = 30;
+    private static final int BULLET_TIMEOUT = 50;
     private static final int FLYTER_DAMAGE = 5;
     private static final int FLYTER_MAX_HEALTH = 100;
 
@@ -38,9 +38,9 @@ public class Flyter extends Ship implements Drawable {
 		canvas.drawPath(flyter, paint);
 	}
 
-    public void fireProjectile(FPoint target) {
+    public void fireProjectile() {
         if(bulletTimeout <= 0) {
-            projectiles.add(new Projectile(new FPoint(location), target, false, FLYTER_DAMAGE));
+            projectiles.add(new Projectile(new FPoint(location), 180, false, FLYTER_DAMAGE));
             bulletTimeout = BULLET_TIMEOUT;
         }
         bulletTimeout--;
