@@ -1,9 +1,10 @@
 package com.flyne.ship;
 
+import com.flyne.Drawable;
 import com.flyne.FPoint;
 
 
-public abstract class Ship {
+public abstract class Ship implements Drawable {
     protected FPoint location;
     protected int health;
     protected int bulletTimeout;

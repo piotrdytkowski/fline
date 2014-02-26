@@ -4,10 +4,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import com.flyne.R;
-import com.flyne.ship.Flyter;
-import com.flyne.ship.Ryder;
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -19,6 +15,11 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.view.MotionEvent;
 import android.view.View;
+
+import com.flyne.ship.Flyekazee;
+import com.flyne.ship.Flyter;
+import com.flyne.ship.Ryder;
+import com.flyne.ship.Ship;
 
 public class GraphicsTestView extends View {
 
@@ -54,7 +55,7 @@ public class GraphicsTestView extends View {
     private boolean gameOver = false;
 
     private List<Projectile> projectiles;
-    private List<Flyter> flyters;
+    private List<Ship> enemyShips;
     private int bulletTimeout = 0;
 
     private Speedometer speedometer;
@@ -72,7 +73,7 @@ public class GraphicsTestView extends View {
     	currentSpeed = START_GAME_SPEED;
     	track = new Track();
     	projectiles = new ArrayList<Projectile>();
-    	flyters = new ArrayList<Flyter>();
+    	enemyShips = new ArrayList<Ship>();
     	gameOver = false;
     	event = null;
     	touchOne = false;
@@ -125,7 +126,10 @@ public class GraphicsTestView extends View {
 
 	private void createFlyter() {
 		if (Math.random() < 0.005) {
-			flyters.add(new Flyter(projectiles, new FPoint(this.getWidth() + 100, this.getHeight() / 2)));
+			enemyShips.add(new Flyter(projectiles, new FPoint(this.getWidth() + 100, this.getHeight() / 2)));
+		}
+		if (Math.random() < 0.001) {
+			enemyShips.add(new Flyekazee(new FPoint(this.getWidth() + 100, this.getHeight() / 2)));
 		}
 	}
 
@@ -204,7 +208,7 @@ public class GraphicsTestView extends View {
             Projectile projectile = projectileIterator.next();
             if(projectile.isFriendly()) {
                 projectile.draw(canvas, PaintProvider.PAINT_PROJECTILE);
-                for (Flyter flyter : flyters) {
+                for (Ship flyter : enemyShips) {
                     if(detectProjectileHit(flyter.getLocation(), 40, projectile)) {
                         flyter.takeDamage(projectile.getDamage());
                         projectileIterator.remove();
@@ -219,11 +223,10 @@ public class GraphicsTestView extends View {
                 }
             }
         }
-        Iterator<Flyter> iterator = flyters.iterator();
+        Iterator<Ship> iterator = enemyShips.iterator();
         while(iterator.hasNext()) {
-            Flyter flyter = iterator.next();
+            Ship flyter = iterator.next();
             flyter.draw(canvas, PaintProvider.PAINT_FLYTER);
-            flyter.fireProjectile();
             if(flyter.isDead()){
                 iterator.remove();
             }

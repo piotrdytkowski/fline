@@ -38,11 +38,13 @@ public class Flyter extends Ship implements Drawable {
 		flyter.lineTo(location.x - 0.5f * DIMENSION, location.y + 0.25f * DIMENSION);
 		flyter.lineTo(location.x - 0.375f * DIMENSION, location.y);
 		flyter.lineTo(location.x - 0.75f * DIMENSION, location.y);
-
+		
+		fireProjectile();
+		
 		canvas.drawPath(flyter, paint);
 	}
 
-    public void fireProjectile() {
+    private void fireProjectile() {
         if(bulletTimeout <= 0) {
             projectiles.add(new Projectile(new FPoint(location), 180, false, FLYTER_DAMAGE));
             bulletTimeout = BULLET_TIMEOUT;
