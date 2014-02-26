@@ -51,6 +51,12 @@ public class Flyekazee extends Ship implements Drawable {
 			}
 		} else {
 			location.x -= SPEED;
+			if (location.x - DIMENSION < ryder.location.x && location.x + DIMENSION > ryder.location.x) {
+				if (location.y - DIMENSION / 2 < ryder.location.y && location.y + DIMENSION / 2 > ryder.location.y) {
+					ryder.takeDamage(15);
+					this.health = 0;
+				}
+			}
 		}
 	}
 
