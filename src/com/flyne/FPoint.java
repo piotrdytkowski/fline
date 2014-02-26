@@ -1,4 +1,4 @@
-package com.example.GraphicsTesting;
+package com.flyne;
 
 public class FPoint {
 	public float x,y;

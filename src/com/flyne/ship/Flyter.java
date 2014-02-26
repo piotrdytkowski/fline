@@ -1,10 +1,14 @@
-package com.example.GraphicsTesting;
+package com.flyne.ship;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 
 import java.util.List;
+
+import com.flyne.Drawable;
+import com.flyne.FPoint;
+import com.flyne.Projectile;
 
 public class Flyter extends Ship implements Drawable {
 

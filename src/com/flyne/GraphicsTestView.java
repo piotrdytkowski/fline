@@ -1,8 +1,12 @@
-package com.example.GraphicsTesting;
+package com.flyne;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import com.flyne.R;
+import com.flyne.ship.Flyter;
+import com.flyne.ship.Ryder;
 
 import android.app.AlertDialog;
 import android.content.Context;

@@ -1,4 +1,6 @@
-package com.example.GraphicsTesting;
+package com.flyne.ship;
+
+import com.flyne.FPoint;
 
 
 public abstract class Ship {

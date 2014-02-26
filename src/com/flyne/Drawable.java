@@ -1,4 +1,4 @@
-package com.example.GraphicsTesting;
+package com.flyne;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;

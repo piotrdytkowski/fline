@@ -1,4 +1,4 @@
-package com.example.GraphicsTesting;
+package com.flyne;
 
 import android.app.Activity;
 import android.os.Bundle;

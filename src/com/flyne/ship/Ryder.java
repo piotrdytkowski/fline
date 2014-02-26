@@ -1,4 +1,7 @@
-package com.example.GraphicsTesting;
+package com.flyne.ship;
+
+import com.flyne.Drawable;
+import com.flyne.FPoint;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
