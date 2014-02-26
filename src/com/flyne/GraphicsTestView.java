@@ -129,7 +129,8 @@ public class GraphicsTestView extends View {
 			enemyShips.add(new Flyter(projectiles, new FPoint(this.getWidth() + 100, this.getHeight() / 2)));
 		}
 		if (Math.random() < 0.001) {
-			enemyShips.add(new Flyekazee(new FPoint(this.getWidth() + 100, this.getHeight() / 2)));
+			int y = Math.random() < 0.5 ? - 100 : this.getHeight() + 100;
+			enemyShips.add(new Flyekazee(new FPoint(this.getWidth() - 100, y), ryder));
 		}
 	}
 

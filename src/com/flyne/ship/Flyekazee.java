@@ -10,12 +10,16 @@ import com.flyne.FPoint;
 public class Flyekazee extends Ship implements Drawable {
 	
 	private static final float DIMENSION = 80;
-    private static final float SPEED = 10;
+    private static final float SPEED = 15;
     private static final int MAX_HEALTH = 150;
+    private boolean aligning = true;
+    private Ryder ryder;
+    private int aligningSpeed;
 
-	public Flyekazee(FPoint location) {
+	public Flyekazee(FPoint location, Ryder ryder) {
 		super(location, MAX_HEALTH, 0);
-		// TODO Auto-generated constructor stub
+		this.ryder = ryder;
+		aligningSpeed = location.y == -100 ? 2 : -2;
 	}
 
 	@Override
@@ -39,7 +43,15 @@ public class Flyekazee extends Ship implements Drawable {
 	}
 
 	private void moveFlyekazee() {
-		location.x -= SPEED;
+		if (aligning) {
+			location.y += aligningSpeed;
+			float indicator = aligningSpeed * (location.y - ryder.getLocation().y);
+			if (indicator > 0) {
+				aligning = false;
+			}
+		} else {
+			location.x -= SPEED;
+		}
 	}
 
 	@Override
