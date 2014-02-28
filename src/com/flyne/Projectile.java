@@ -56,4 +56,16 @@ public class Projectile implements Drawable {
     public int getDamage() {
         return damage;
     }
+
+    public double getAngle() {
+        return angle;
+    }
+
+    public void setAngle(double angle) {
+        this.angle = angle;
+    }
+
+    public void setFriendly(boolean friendly) {
+        this.friendly = friendly;
+    }
 }

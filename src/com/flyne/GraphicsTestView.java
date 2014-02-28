@@ -56,9 +56,13 @@ public class GraphicsTestView extends View {
 
     private List<Projectile> projectiles;
     private List<Ship> enemyShips;
+    private List<ItemDrop> itemDrops;
     private int bulletTimeout = 0;
 
     private Speedometer speedometer;
+    private double multiplier;
+
+    private int reflectionTimer = 0;
 
     public GraphicsTestView(Context context) {
         super(context);
@@ -74,6 +78,7 @@ public class GraphicsTestView extends View {
     	track = new Track();
     	projectiles = new ArrayList<Projectile>();
     	enemyShips = new ArrayList<Ship>();
+        itemDrops = new ArrayList<ItemDrop>();
     	gameOver = false;
     	event = null;
     	touchOne = false;
@@ -86,17 +91,19 @@ public class GraphicsTestView extends View {
     protected void onDraw(Canvas canvas) {
         speedometer.setSpeed(currentSpeed);
         manageTouchState();
+        recalculateMultiplier();
+        applyLineScore();
     	if (localCache == null) {
 			localCache = Bitmap.createBitmap(canvas.getWidth(), canvas.getHeight(), Bitmap.Config.RGB_565);
 			localCanvas = new Canvas(localCache);
-			ryder = new Ryder(new FPoint(70, canvas.getHeight()/2));;
+			ryder = new Ryder(new FPoint(70, canvas.getHeight()/2));
 		}
     	checkPlayerDead();
-    	createFlyter();
+    	spawnStuff();
     	grabShip();
         fireGuns();
         drawGame(canvas);
-        recalculateScore();
+        handleLineHit();
         cleanLocalCache();
         track.movePoints(currentSpeed);
         
@@ -124,7 +131,7 @@ public class GraphicsTestView extends View {
 		}
 	}
 
-	private void createFlyter() {
+	private void spawnStuff() {
 		if (Math.random() < 0.005) {
 			enemyShips.add(new Flyter(projectiles, new FPoint(this.getWidth() + 100, this.getHeight() / 2)));
 		}
@@ -132,6 +139,9 @@ public class GraphicsTestView extends View {
 			int y = Math.random() < 0.5 ? - 100 : this.getHeight() + 100;
 			enemyShips.add(new Flyekazee(new FPoint(this.getWidth() - 100, y), ryder));
 		}
+        if(Math.random() < 0.001) {
+            itemDrops.add(new ItemDrop(new FPoint(this.getWidth() + 100, (float)Math.random()*this.getHeight())));
+        }
 	}
 
 	private void fireGuns() {
@@ -204,6 +214,34 @@ public class GraphicsTestView extends View {
         speedometer.draw(canvas, PaintProvider.PAINT_NEEDLE);
     	canvas.drawText("Score: " + score, TEXT_PADDING, TEXT_PADDING, PaintProvider.PAINT_TEXT);
     	canvas.drawText("Health: " + ryder.getHealth(), TEXT_PADDING + 200, TEXT_PADDING, PaintProvider.PAINT_TEXT);
+        manageProjectiles(canvas);
+        manageEnemyShips(canvas);
+        manageItemDrops(canvas);
+        ryder.draw(canvas, PaintProvider.PAINT_RYDER);
+	}
+
+    private void manageItemDrops(Canvas canvas) {
+        Iterator<ItemDrop> iterator = itemDrops.iterator();
+        while (iterator.hasNext()) {
+            ItemDrop itemDrop = iterator.next();
+            if(itemDrop.isOffScreen()) {
+                iterator.remove();
+            } else {
+                if(itemDrop.getLocation().distance(ryder.getLocation()) < 40) {
+                    reflectionTimer = 200;
+                    iterator.remove();
+                } else {
+                    itemDrop.move(currentSpeed);
+                    itemDrop.draw(canvas, PaintProvider.PAINT_ITEM_DROP_SHIELD);
+                    if(reflectionTimer > 0) {
+                        reflectionTimer--;
+                    }
+                }
+            }
+        }
+    }
+
+    private void manageProjectiles(Canvas canvas) {
         Iterator<Projectile> projectileIterator = projectiles.iterator();
         while(projectileIterator.hasNext()) {
             Projectile projectile = projectileIterator.next();
@@ -218,36 +256,42 @@ public class GraphicsTestView extends View {
                 }
             } else {
                 projectile.draw(canvas, PaintProvider.PAINT_FLYTER_PROJECTILE);
-                if(detectProjectileHit(ryder.getLocation(), 20, projectile)) {
+                float distance = ryder.getLocation().distance(projectile.getLocation());
+                if(distance < 20) {
                     ryder.takeDamage(projectile.getDamage());
                     projectileIterator.remove();
+                } else if(reflectionTimer > 0 && distance < 50) {
+                    projectile.setFriendly(true);
+                    projectile.setAngle(FPoint.calculateAngleBetweenPoints(projectile.getLocation(), ryder.getLocation()));
                 }
             }
         }
+    }
+
+    private void manageEnemyShips(Canvas canvas) {
         Iterator<Ship> iterator = enemyShips.iterator();
         while(iterator.hasNext()) {
             Ship ship = iterator.next();
             if(ship.isDead() || ship.isOffScreen()){
+                scorePoints(100);
                 iterator.remove();
             } else {
-            	ship.draw(canvas, PaintProvider.PAINT_FLYTER);
+                ship.draw(canvas, PaintProvider.PAINT_FLYTER);
             }
         }
-        ryder.draw(canvas, PaintProvider.PAINT_RYDER);
-	}
+    }
 
     private boolean detectProjectileHit(FPoint location, int searchRadius, Projectile projectile) {
         return location.distance(projectile.getLocation()) < searchRadius;
     }
 
-    private void recalculateScore() {
+    private void handleLineHit() {
         if(touchOne && shipGrabbed) {
             lineHit = circleScanner.scanCircleAtPoint(localCache, event.getX(0), event.getY(0));
             if(lineHit) {
             	if (currentSpeed < MAX_SPEED) {
 					currentSpeed += ACCELERATION;
 				}
-				score += AWARD;
             } else {
             	decreaseSpeed();
             }
@@ -255,7 +299,29 @@ public class GraphicsTestView extends View {
         	decreaseSpeed();
         }
 	}
-	
+
+    private void applyLineScore() {
+        if(touchOne && shipGrabbed && lineHit) {
+            scorePoints(AWARD);
+        }
+    }
+
+    private void scorePoints(int points) {
+        score += points * multiplier;
+    }
+
+    private void recalculateMultiplier() {
+        if(currentSpeed < MAX_SPEED*0.25) {
+            multiplier = 0.5;
+        } else if (currentSpeed < MAX_SPEED*0.5) {
+            multiplier = 1;
+        } else if (currentSpeed < MAX_SPEED*0.75) {
+            multiplier = 1.5;
+        } else {
+            multiplier = 3;
+        }
+    }
+
 	private void decreaseSpeed() {
 		if (event != null) {
 			if (currentSpeed > 0) {

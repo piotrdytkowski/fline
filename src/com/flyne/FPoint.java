@@ -39,4 +39,10 @@ public class FPoint {
         return  new FPoint((float)(location.x + distance * Math.cos(Math.toRadians(angle))),
                 (float)(location.y + distance * Math.sin(Math.toRadians(angle))));
     }
+
+    public static double calculateAngleBetweenPoints(FPoint location, FPoint other) {
+        double deltaY = location.y - other.y;
+        double deltaX = location.x - other.x;
+        return Math.atan2(deltaY, deltaX) * 180 / Math.PI;
+    }
 }

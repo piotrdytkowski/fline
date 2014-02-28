@@ -122,6 +122,14 @@ public class PaintProvider {
             setAntiAlias(true);
         }
     };
+    public static final Paint PAINT_ITEM_DROP_SHIELD = new Paint() {
+        {
+            setStyle(Style.FILL_AND_STROKE);
+            setColor(Color.rgb(30,162,200));
+            setStrokeWidth(2);
+            setAntiAlias(true);
+        }
+    };
 
 
 
