@@ -1,6 +1,9 @@
 package com.flyne;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -38,13 +41,15 @@ public class GameView extends View {
     private int reflectionTimer = 0;
     
     private GameState gameState;
-    private final GameListener touchStateListener = new TouchStateListener();
-    private final GameListener lineScoreListener = new LineScoreListener();
-    private final GameListener multiplierHandler = new MultiplierHandler();
-    private final GameListener spawner = new Spawner();
-    private final GameListener speedHandler = new SpeedHandler();
-    private final GameListener projectileHandler = new ProjectileHandler();
-    private final GameListener gameEndListener = new GameEndListener();
+
+    private final List<GameListener> gameListeners = Arrays.asList(
+                                                    new TouchStateListener(),
+                                                    new LineScoreListener(),
+                                                    new MultiplierHandler(),
+                                                    new Spawner(),
+                                                    new SpeedHandler(),
+                                                    new ProjectileHandler(),
+                                                    new GameEndListener());
 
     public GameView(Context context) {
         super(context);
@@ -72,14 +77,9 @@ public class GameView extends View {
     	drawGame(canvas);
     	
         speedometer.setSpeed(gameState.getCurrentSpeed());
-        multiplierHandler.onGameEvent(gameState);
-        lineScoreListener.onGameEvent(gameState);
-    	gameEndListener.onGameEvent(gameState);
-    	spawner.onGameEvent(gameState);
-    	projectileHandler.onGameEvent(gameState);
-        touchStateListener.onGameEvent(gameState);
-        speedHandler.onGameEvent(gameState);
-        
+        for (GameListener gameListener : gameListeners) {
+            gameListener.onGameEvent(gameState);
+        }
         track.movePoints(gameState.getCurrentSpeed());
         
         if (!gameState.isGameOver()) {
