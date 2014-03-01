@@ -15,6 +15,7 @@ import android.graphics.Paint;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.flyne.drawables.HealthBar;
 import com.flyne.drawables.ItemDrop;
 import com.flyne.drawables.Projectile;
 import com.flyne.drawables.Speedometer;
@@ -29,6 +30,7 @@ public class GameView extends View {
 	public static final float GRAB_DISTANCE = 100;
 
     private Speedometer speedometer;
+    private HealthBar healthBar;
     private GameState gameState;
     private final List<GameListener> gameListeners = Arrays.asList(new TouchStateListener(), new LineScoreListener(), new MultiplierHandler(),
          new Spawner(), new SpeedHandler(), new ProjectileHandler(), new GameEndListener(), new ItemDropHandler(), new EnemyHandler());
@@ -38,6 +40,7 @@ public class GameView extends View {
         init();
         Resources res = getResources();
         speedometer = new Speedometer(BitmapFactory.decodeResource(res, R.drawable.speedometer), gameState.getGameParameters().getMaxSpeed());
+        healthBar = new HealthBar(new FPoint(400,30), Player.SHIP_MAX_HEALTH);
     }
     
     private void init() {
@@ -54,14 +57,14 @@ public class GameView extends View {
 			gameState.setLocalCanvas(new Canvas(gameState.getLocalCache()));
 			gameState.setPlayer(new Player(new FPoint(70, canvas.getHeight()/2)));
 		}
-    	
-    	drawGame(canvas);
-
         gameState.getTrack().movePoints(gameState.getCurrentSpeed());
         for (GameListener gameListener : gameListeners) {
             gameListener.onGameEvent(gameState);
         }
         speedometer.setSpeed(gameState.getCurrentSpeed());
+        healthBar.setCurrentHealth(gameState.getPlayer().getHealth());
+
+        drawGame(canvas);
 
         if (!gameState.isGameOver()) {
 			invalidate(); // Force a re-draw
@@ -105,8 +108,8 @@ public class GameView extends View {
         gameState.getTrack().getElectroView().draw(canvas, electroPaint);
         gameState.getTrack().getLineView().draw(gameState.getLocalCanvas(), linePaint);
         speedometer.draw(canvas, PaintProvider.PAINT_NEEDLE);
+        healthBar.draw(canvas, PaintProvider.PAINT_HEALTH_BAR);
     	canvas.drawText("Score: " + gameState.getScore(), TEXT_PADDING, TEXT_PADDING, PaintProvider.PAINT_TEXT);
-    	canvas.drawText("Health: " + gameState.getPlayer().getHealth(), TEXT_PADDING + 200, TEXT_PADDING, PaintProvider.PAINT_TEXT);
         drawProjectiles(canvas);
         drawEnemyShips(canvas);
         drawItemDrops(canvas);

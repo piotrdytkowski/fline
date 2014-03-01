@@ -9,7 +9,7 @@ import android.graphics.Path;
 
 public class Player extends Ship implements Drawable {
     private static final float SHIP_DIMENSIONS = 30;
-    private static final int SHIP_MAX_HEALTH = 100;
+    public static final int SHIP_MAX_HEALTH = 100;
     private static final int BULLET_TIMEOUT = 10;
     
     private int bulletTimeout = 0;

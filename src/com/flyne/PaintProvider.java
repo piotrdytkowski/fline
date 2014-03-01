@@ -130,7 +130,14 @@ public class PaintProvider {
             setAntiAlias(true);
         }
     };
-
+    public static final Paint PAINT_HEALTH_BAR = new Paint() {
+        {
+            setStyle(Style.FILL_AND_STROKE);
+            setColor(Color.rgb(50, 210, 40));
+            setStrokeWidth(2);
+            setAntiAlias(true);
+        }
+    };
 
 
     public static Paint activePaint(float speed, float maxSpeed) {
