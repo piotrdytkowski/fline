@@ -1,8 +1,6 @@
 package com.flyne;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 import android.app.AlertDialog;
@@ -17,14 +15,7 @@ import android.graphics.Paint;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.flyne.listener.GameEndListener;
-import com.flyne.listener.GameListener;
-import com.flyne.listener.LineScoreListener;
-import com.flyne.listener.MultiplierHandler;
-import com.flyne.listener.ProjectileHandler;
-import com.flyne.listener.Spawner;
-import com.flyne.listener.SpeedHandler;
-import com.flyne.listener.TouchStateListener;
+import com.flyne.listener.*;
 import com.flyne.ship.Player;
 import com.flyne.ship.Ship;
 
@@ -33,23 +24,11 @@ public class GameView extends View {
     public static final int AWARD = 10;
 	private static final float TEXT_PADDING = 30;
 	public static final float GRAB_DISTANCE = 100;
-    
-    private Track track;
 
     private Speedometer speedometer;
-
-    private int reflectionTimer = 0;
-    
     private GameState gameState;
-
-    private final List<GameListener> gameListeners = Arrays.asList(
-                                                    new TouchStateListener(),
-                                                    new LineScoreListener(),
-                                                    new MultiplierHandler(),
-                                                    new Spawner(),
-                                                    new SpeedHandler(),
-                                                    new ProjectileHandler(),
-                                                    new GameEndListener());
+    private final List<GameListener> gameListeners = Arrays.asList(new TouchStateListener(), new LineScoreListener(), new MultiplierHandler(),
+         new Spawner(), new SpeedHandler(), new ProjectileHandler(), new GameEndListener(), new ItemDropHandler(), new EnemyHandler());
 
     public GameView(Context context) {
         super(context);
@@ -60,7 +39,6 @@ public class GameView extends View {
     
     private void init() {
     	gameState = new GameState();
-    	track = new Track();
     }
 
     // Called back to draw the view. Also called by invalidate().
@@ -75,13 +53,13 @@ public class GameView extends View {
 		}
     	
     	drawGame(canvas);
-    	
-        speedometer.setSpeed(gameState.getCurrentSpeed());
+
+        gameState.getTrack().movePoints(gameState.getCurrentSpeed());
         for (GameListener gameListener : gameListeners) {
             gameListener.onGameEvent(gameState);
         }
-        track.movePoints(gameState.getCurrentSpeed());
-        
+        speedometer.setSpeed(gameState.getCurrentSpeed());
+
         if (!gameState.isGameOver()) {
 			invalidate(); // Force a re-draw
 		} else {
@@ -120,81 +98,38 @@ public class GameView extends View {
             linePaint = PaintProvider.inactivePaint();
             electroPaint = PaintProvider.PAINT_ELECTRO_INACTIVE;
         }
-    	track.getLineView().draw(canvas, linePaint);
-    	track.getElectroView().draw(canvas, electroPaint);
-    	track.getLineView().draw(gameState.getLocalCanvas(), linePaint);
+        gameState.getTrack().getLineView().draw(canvas, linePaint);
+        gameState.getTrack().getElectroView().draw(canvas, electroPaint);
+        gameState.getTrack().getLineView().draw(gameState.getLocalCanvas(), linePaint);
         speedometer.draw(canvas, PaintProvider.PAINT_NEEDLE);
     	canvas.drawText("Score: " + gameState.getScore(), TEXT_PADDING, TEXT_PADDING, PaintProvider.PAINT_TEXT);
     	canvas.drawText("Health: " + gameState.getPlayer().getHealth(), TEXT_PADDING + 200, TEXT_PADDING, PaintProvider.PAINT_TEXT);
-        manageProjectiles(canvas);
-        manageEnemyShips(canvas);
-        manageItemDrops(canvas);
+        drawProjectiles(canvas);
+        drawEnemyShips(canvas);
+        drawItemDrops(canvas);
         gameState.getPlayer().draw(canvas, PaintProvider.PAINT_RYDER);
 	}
 
-    private void manageItemDrops(Canvas canvas) {
-        Iterator<ItemDrop> iterator = gameState.getItemDrops().iterator();
-        while (iterator.hasNext()) {
-            ItemDrop itemDrop = iterator.next();
-            if(itemDrop.isOffScreen()) {
-                iterator.remove();
-            } else {
-                if(itemDrop.getLocation().distance(gameState.getPlayer().getLocation()) < 40) {
-                    reflectionTimer = 200;
-                    iterator.remove();
-                } else {
-                    itemDrop.move(gameState.getCurrentSpeed());
-                    itemDrop.draw(canvas, PaintProvider.PAINT_ITEM_DROP_SHIELD);
-                    if(reflectionTimer > 0) {
-                        reflectionTimer--;
-                    }
-                }
-            }
+    private void drawItemDrops(Canvas canvas) {
+        for (ItemDrop itemDrop : gameState.getItemDrops()) {
+            itemDrop.draw(canvas, PaintProvider.PAINT_ITEM_DROP_SHIELD);
         }
     }
 
-    private void manageProjectiles(Canvas canvas) {
-        Iterator<Projectile> projectileIterator = gameState.getProjectiles().iterator();
-        while(projectileIterator.hasNext()) {
-            Projectile projectile = projectileIterator.next();
-            if(projectile.isFriendly()) {
+    private void drawProjectiles(Canvas canvas) {
+        for (Projectile projectile : gameState.getProjectiles()) {
+            if (projectile.isFriendly()) {
                 projectile.draw(canvas, PaintProvider.PAINT_PROJECTILE);
-                for (Ship flyter : gameState.getEnemyShips()) {
-                    if(detectProjectileHit(flyter.getLocation(), 40, projectile)) {
-                        flyter.takeDamage(projectile.getDamage());
-                        projectileIterator.remove();
-                        break;
-                    }
-                }
             } else {
                 projectile.draw(canvas, PaintProvider.PAINT_FLYTER_PROJECTILE);
-                float distance = gameState.getPlayer().getLocation().distance(projectile.getLocation());
-                if(distance < 20) {
-                	gameState.getPlayer().takeDamage(projectile.getDamage());
-                    projectileIterator.remove();
-                } else if(reflectionTimer > 0 && distance < 50) {
-                    projectile.setFriendly(true);
-                    projectile.setAngle(FPoint.calculateAngleBetweenPoints(projectile.getLocation(), gameState.getPlayer().getLocation()));
-                }
             }
         }
     }
 
-    private void manageEnemyShips(Canvas canvas) {
-        Iterator<Ship> iterator = gameState.getEnemyShips().iterator();
-        while(iterator.hasNext()) {
-            Ship ship = iterator.next();
-            if(ship.isDead() || ship.isOffScreen()){
-                gameState.scorePoints(100);
-                iterator.remove();
-            } else {
-                ship.draw(canvas, PaintProvider.PAINT_FLYTER);
-            }
+    private void drawEnemyShips(Canvas canvas) {
+        for (Ship ship : gameState.getEnemyShips()) {
+            ship.draw(canvas, PaintProvider.PAINT_FLYTER);
         }
-    }
-
-    private boolean detectProjectileHit(FPoint location, int searchRadius, Projectile projectile) {
-        return location.distance(projectile.getLocation()) < searchRadius;
     }
 
 	@Override

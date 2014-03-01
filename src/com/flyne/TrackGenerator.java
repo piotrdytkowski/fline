@@ -8,7 +8,7 @@ import android.graphics.Path;
 
 public class TrackGenerator {
 
-	public Path generateTrack(List<FPoint> points) {
+	public static Path generateTrack(List<FPoint> points) {
         Path path = new Path();
         Iterator<FPoint> iterator = points.iterator();
         FPoint prevPoint = iterator.next();
@@ -22,7 +22,7 @@ public class TrackGenerator {
         return path;
     }
 
-    public Path generateTrackWithOffset(List<FPoint> points, float xOffset, float yOffset) {
+    public static Path generateTrackWithOffset(List<FPoint> points, float xOffset, float yOffset) {
         List<FPoint> offsetPoints = new ArrayList<FPoint>(points.size());
         for (FPoint point : points) {
             if(points.indexOf(point) != 0) {

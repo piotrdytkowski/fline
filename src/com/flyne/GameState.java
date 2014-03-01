@@ -14,11 +14,13 @@ public class GameState {
 	
 	private GameParameters gameParameters = new GameParameters();
 
+    private Track track = new Track();
 	private MotionEvent event;
 	private boolean touchOne, touchTwo, shipGrabbed, lineHit;
 	private int score;
 	private double multiplier;
 	private float currentSpeed = gameParameters.getStartSpeed();
+    private int shieldTimer;
 	
 	private List<Projectile> projectiles = new ArrayList<Projectile>();;
     private List<Ship> enemyShips = new ArrayList<Ship>();
@@ -142,6 +144,16 @@ public class GameState {
 	public void setGameOver(boolean gameOver) {
 		this.gameOver = gameOver;
 	}
-	
-	
+    public int getShieldTimer() {
+        return shieldTimer;
+    }
+    public void setShieldTimer(int shieldTimer) {
+        this.shieldTimer = shieldTimer;
+    }
+    public Track getTrack() {
+        return track;
+    }
+    public void setTrack(Track track) {
+        this.track = track;
+    }
 }

@@ -10,7 +10,6 @@ public class Track {
     private static final float BORDER_PADDING = 30;
 
     private List<FPoint> points;
-    private TrackGenerator trackGenerator;
 
     private LineView lineView;
     private ElectroView electroView;
@@ -19,7 +18,6 @@ public class Track {
         points = new ArrayList<FPoint>();
         lineView = new LineView();
         electroView = new ElectroView();
-        trackGenerator = new TrackGenerator();
     }
 
     private void managePoints(int width, int height) {
@@ -65,7 +63,7 @@ public class Track {
         @Override
         public void draw(Canvas canvas, Paint paint) {
             managePoints(canvas.getWidth(), canvas.getHeight());
-            canvas.drawPath(trackGenerator.generateTrack(Track.this.points), paint);
+            canvas.drawPath(TrackGenerator.generateTrack(Track.this.points), paint);
         }
 
         @Override
@@ -79,7 +77,7 @@ public class Track {
         @Override
         public void draw(Canvas canvas, Paint paint) {
             for(int i = 0; i < 2; i++) {
-                canvas.drawPath(trackGenerator.generateTrackWithOffset(points, ((float)Math.random()*500)-250, 40-(float)Math.random()*40.0f), paint);
+                canvas.drawPath(TrackGenerator.generateTrackWithOffset(points, ((float)Math.random()*500)-250, 40-(float)Math.random()*40.0f), paint);
             }
         }
 

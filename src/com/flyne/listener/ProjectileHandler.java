@@ -5,6 +5,7 @@ import java.util.Iterator;
 import com.flyne.FPoint;
 import com.flyne.GameState;
 import com.flyne.Projectile;
+import com.flyne.ship.Ship;
 
 public class ProjectileHandler implements GameListener {
 
@@ -25,15 +26,37 @@ public class ProjectileHandler implements GameListener {
     }
 
     private void cleanUpProjectiles(GameState gameState) {
-        Iterator<Projectile> iterator = gameState.getProjectiles().iterator();
-        while(iterator.hasNext()) {
-            Projectile next = iterator.next();
-            if(next.getLocation().x > gameState.getWidth() || next.getLocation().x < 0
-                    || next.getLocation().y > gameState.getHeight() || next.getLocation().y < 0) {
-                iterator.remove();
+        Iterator<Projectile> projectileIterator = gameState.getProjectiles().iterator();
+        while(projectileIterator.hasNext()) {
+            Projectile projectile = projectileIterator.next();
+            if(projectile.getLocation().x > gameState.getWidth() || projectile.getLocation().x < 0
+                    || projectile.getLocation().y > gameState.getHeight() || projectile.getLocation().y < 0) {
+                projectileIterator.remove();
+            } else {
+                if(projectile.isFriendly()) {
+                    for (Ship flyter : gameState.getEnemyShips()) {
+                        if(detectProjectileHit(flyter.getLocation(), 40, projectile)) {
+                            flyter.takeDamage(projectile.getDamage());
+                            projectileIterator.remove();
+                            break;
+                        }
+                    }
+                } else {
+                    float distance = gameState.getPlayer().getLocation().distance(projectile.getLocation());
+                    if(distance < 20) {
+                        gameState.getPlayer().takeDamage(projectile.getDamage());
+                        projectileIterator.remove();
+                    } else if(gameState.getShieldTimer() > 0 && distance < 50) {
+                        projectile.setFriendly(true);
+                        projectile.setAngle(FPoint.calculateAngleBetweenPoints(projectile.getLocation(), gameState.getPlayer().getLocation()));
+                    }
+                }
             }
         }
+    }
 
+    private boolean detectProjectileHit(FPoint location, int searchRadius, Projectile projectile) {
+        return location.distance(projectile.getLocation()) < searchRadius;
     }
 
 }
