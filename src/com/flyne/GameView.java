@@ -14,9 +14,11 @@ import android.graphics.Paint;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.flyne.listener.GameEndListener;
 import com.flyne.listener.GameListener;
 import com.flyne.listener.LineScoreListener;
 import com.flyne.listener.MultiplierHandler;
+import com.flyne.listener.ProjectileHandler;
 import com.flyne.listener.Spawner;
 import com.flyne.listener.SpeedHandler;
 import com.flyne.listener.TouchStateListener;
@@ -25,19 +27,11 @@ import com.flyne.ship.Ship;
 
 public class GameView extends View {
 
-
-    private static final float START_GAME_SPEED = 5;
     public static final int AWARD = 10;
 	private static final float TEXT_PADDING = 30;
 	public static final float GRAB_DISTANCE = 100;
-    private static final int PLAYER_DAMAGE = 50;
-
     
     private Track track;
-    
-    private boolean gameOver = false;
-
-    private int bulletTimeout = 0;
 
     private Speedometer speedometer;
 
@@ -49,6 +43,8 @@ public class GameView extends View {
     private final GameListener multiplierHandler = new MultiplierHandler();
     private final GameListener spawner = new Spawner();
     private final GameListener speedHandler = new SpeedHandler();
+    private final GameListener projectileHandler = new ProjectileHandler();
+    private final GameListener gameEndListener = new GameEndListener();
 
     public GameView(Context context) {
         super(context);
@@ -59,17 +55,12 @@ public class GameView extends View {
     
     private void init() {
     	gameState = new GameState();
-    	gameState.setCurrentSpeed(START_GAME_SPEED);
     	track = new Track();
-    	gameOver = false;
     }
 
     // Called back to draw the view. Also called by invalidate().
     @Override
     protected void onDraw(Canvas canvas) {
-        speedometer.setSpeed(gameState.getCurrentSpeed());
-        multiplierHandler.onGameEvent(gameState);
-        lineScoreListener.onGameEvent(gameState);
     	if (gameState.getLocalCache() == null) {
     		gameState.setWidth(canvas.getWidth());
     		gameState.setHeight(canvas.getHeight());
@@ -77,59 +68,45 @@ public class GameView extends View {
 			gameState.setLocalCanvas(new Canvas(gameState.getLocalCache()));
 			gameState.setPlayer(new Player(new FPoint(70, canvas.getHeight()/2)));
 		}
-    	checkPlayerDead();
+    	
+    	drawGame(canvas);
+    	
+        speedometer.setSpeed(gameState.getCurrentSpeed());
+        multiplierHandler.onGameEvent(gameState);
+        lineScoreListener.onGameEvent(gameState);
+    	gameEndListener.onGameEvent(gameState);
     	spawner.onGameEvent(gameState);
-        fireGuns();
-        drawGame(canvas);
+    	projectileHandler.onGameEvent(gameState);
         touchStateListener.onGameEvent(gameState);
         speedHandler.onGameEvent(gameState);
-        cleanLocalCache();
+        
         track.movePoints(gameState.getCurrentSpeed());
-        if (!gameOver) {
+        
+        if (!gameState.isGameOver()) {
 			invalidate(); // Force a re-draw
+		} else {
+			showEndGameDialog();
 		}
+        
+        cleanLocalCache();
     }
 
-    private void checkPlayerDead() {
-		if (gameState.getPlayer().isDead() || gameState.getCurrentSpeed() < 0.01) {
-			gameOver = true;
-			AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext());
-			String message = gameState.getPlayer().isDead() ? "Game Over. You were destroyed." : "Game Over. You dropped. Keep flyin!";
-			builder.setMessage(message)
-			.setPositiveButton("Restart", new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					init();
-					GameView.this.invalidate();
-				}
-			});
-			AlertDialog dialog = builder.create();
-			dialog.show();
-		}
+    private void showEndGameDialog() {
+    	AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext());
+		String message = gameState.getPlayer().isDead() ? "Game Over. You were destroyed." : "Game Over. You dropped. Keep flyin!";
+		builder.setMessage(message)
+		.setPositiveButton("Restart", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				init();
+				GameView.this.invalidate();
+			}
+		});
+		AlertDialog dialog = builder.create();
+		dialog.show();
 	}
 
-	private void fireGuns() {
-        if(gameState.isTouchTwo() && bulletTimeout <= 0) {
-            gameState.getProjectiles().add(new Projectile(new FPoint(gameState.getPlayer().getLocation()), new FPoint(gameState.getEvent().getX(1), gameState.getEvent().getY(1)), true, PLAYER_DAMAGE));
-            bulletTimeout = gameState.getPlayer().getBulletTimeout();
-        }
-        bulletTimeout--;
-        cleanUpProjectiles();
-    }
-
-    private void cleanUpProjectiles() {
-        Iterator<Projectile> iterator = gameState.getProjectiles().iterator();
-        while(iterator.hasNext()) {
-            Projectile next = iterator.next();
-            if(next.getLocation().x > getWidth() || next.getLocation().x < 0
-                    || next.getLocation().y > getHeight() || next.getLocation().y < 0) {
-                iterator.remove();
-            }
-        }
-
-    }
-
-    private void cleanLocalCache() {
+	private void cleanLocalCache() {
 		gameState.getLocalCache().eraseColor(Color.BLACK);
 	}
 

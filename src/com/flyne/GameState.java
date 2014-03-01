@@ -18,11 +18,13 @@ public class GameState {
 	private boolean touchOne, touchTwo, shipGrabbed, lineHit;
 	private int score;
 	private double multiplier;
-	private float currentSpeed;
+	private float currentSpeed = gameParameters.getStartSpeed();
 	
 	private List<Projectile> projectiles = new ArrayList<Projectile>();;
     private List<Ship> enemyShips = new ArrayList<Ship>();
     private List<ItemDrop> itemDrops = new ArrayList<ItemDrop>();
+    
+    private boolean gameOver;
     
     private Player player;
     
@@ -133,6 +135,12 @@ public class GameState {
 	}
 	public void setLocalCanvas(Canvas localCanvas) {
 		this.localCanvas = localCanvas;
+	}
+	public boolean isGameOver() {
+		return gameOver;
+	}
+	public void setGameOver(boolean gameOver) {
+		this.gameOver = gameOver;
 	}
 	
 	

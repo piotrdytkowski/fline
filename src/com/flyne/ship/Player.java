@@ -11,6 +11,8 @@ public class Player extends Ship implements Drawable {
     private static final float SHIP_DIMENSIONS = 30;
     private static final int SHIP_MAX_HEALTH = 100;
     private static final int BULLET_TIMEOUT = 10;
+    
+    private int bulletTimeout = 0;
 
     public Player(FPoint location) {
         super(location, SHIP_MAX_HEALTH, BULLET_TIMEOUT);
@@ -34,4 +36,16 @@ public class Player extends Ship implements Drawable {
     public int getIndex() {
         return DrawingDepth.FOREGROUND.getIndex();
     }
+
+	public int getBulletTimeout() {
+		return bulletTimeout;
+	}
+
+	public void tickBulletTimeout() {
+		if (bulletTimeout <= 0) {
+			bulletTimeout = BULLET_TIMEOUT;
+		}
+		bulletTimeout--;
+	}
+    
 }
