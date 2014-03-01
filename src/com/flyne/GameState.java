@@ -3,8 +3,10 @@ package com.flyne;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.flyne.ship.Player;
-import com.flyne.ship.Ship;
+import com.flyne.drawables.ItemDrop;
+import com.flyne.drawables.Projectile;
+import com.flyne.drawables.ship.Player;
+import com.flyne.drawables.ship.Ship;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -22,7 +24,7 @@ public class GameState {
 	private float currentSpeed = gameParameters.getStartSpeed();
     private int shieldTimer;
 	
-	private List<Projectile> projectiles = new ArrayList<Projectile>();;
+	private List<Projectile> projectiles = new ArrayList<Projectile>();
     private List<Ship> enemyShips = new ArrayList<Ship>();
     private List<ItemDrop> itemDrops = new ArrayList<ItemDrop>();
     

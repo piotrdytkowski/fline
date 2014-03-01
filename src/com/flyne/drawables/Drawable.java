@@ -1,4 +1,4 @@
-package com.flyne;
+package com.flyne.drawables;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;

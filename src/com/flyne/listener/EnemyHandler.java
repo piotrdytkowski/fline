@@ -1,7 +1,7 @@
 package com.flyne.listener;
 
 import com.flyne.GameState;
-import com.flyne.ship.Ship;
+import com.flyne.drawables.ship.Ship;
 
 import java.util.Iterator;
 

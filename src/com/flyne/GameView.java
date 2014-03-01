@@ -15,9 +15,12 @@ import android.graphics.Paint;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.flyne.drawables.ItemDrop;
+import com.flyne.drawables.Projectile;
+import com.flyne.drawables.Speedometer;
 import com.flyne.listener.*;
-import com.flyne.ship.Player;
-import com.flyne.ship.Ship;
+import com.flyne.drawables.ship.Player;
+import com.flyne.drawables.ship.Ship;
 
 public class GameView extends View {
 

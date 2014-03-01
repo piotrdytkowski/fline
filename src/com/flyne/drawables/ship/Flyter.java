@@ -1,4 +1,4 @@
-package com.flyne.ship;
+package com.flyne.drawables.ship;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -6,9 +6,9 @@ import android.graphics.Path;
 
 import java.util.List;
 
-import com.flyne.Drawable;
+import com.flyne.drawables.Drawable;
 import com.flyne.FPoint;
-import com.flyne.Projectile;
+import com.flyne.drawables.Projectile;
 
 public class Flyter extends Ship implements Drawable {
 

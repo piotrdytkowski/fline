@@ -1,8 +1,9 @@
-package com.flyne;
+package com.flyne.drawables;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import com.flyne.FPoint;
 
 public class Speedometer implements Drawable {
 

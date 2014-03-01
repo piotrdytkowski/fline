@@ -1,7 +1,9 @@
-package com.flyne;
+package com.flyne.drawables;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import com.flyne.FPoint;
+import com.flyne.drawables.Drawable;
 
 public class Projectile implements Drawable {
 

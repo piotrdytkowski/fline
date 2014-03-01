@@ -4,8 +4,8 @@ import java.util.Iterator;
 
 import com.flyne.FPoint;
 import com.flyne.GameState;
-import com.flyne.Projectile;
-import com.flyne.ship.Ship;
+import com.flyne.drawables.Projectile;
+import com.flyne.drawables.ship.Ship;
 
 public class ProjectileHandler implements GameListener {
 

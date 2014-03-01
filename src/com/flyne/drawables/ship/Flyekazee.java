@@ -1,10 +1,10 @@
-package com.flyne.ship;
+package com.flyne.drawables.ship;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 
-import com.flyne.Drawable;
+import com.flyne.drawables.Drawable;
 import com.flyne.FPoint;
 
 public class Flyekazee extends Ship implements Drawable {

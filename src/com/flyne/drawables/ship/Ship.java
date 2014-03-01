@@ -1,6 +1,6 @@
-package com.flyne.ship;
+package com.flyne.drawables.ship;
 
-import com.flyne.Drawable;
+import com.flyne.drawables.Drawable;
 import com.flyne.FPoint;
 
 

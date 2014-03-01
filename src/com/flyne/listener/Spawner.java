@@ -2,9 +2,9 @@ package com.flyne.listener;
 
 import com.flyne.FPoint;
 import com.flyne.GameState;
-import com.flyne.ItemDrop;
-import com.flyne.ship.Flyekazee;
-import com.flyne.ship.Flyter;
+import com.flyne.drawables.ItemDrop;
+import com.flyne.drawables.ship.Flyekazee;
+import com.flyne.drawables.ship.Flyter;
 
 public class Spawner implements GameListener {
 
