@@ -7,12 +7,12 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 
-public class Ryder extends Ship implements Drawable {
+public class Player extends Ship implements Drawable {
     private static final float SHIP_DIMENSIONS = 30;
     private static final int SHIP_MAX_HEALTH = 100;
     private static final int BULLET_TIMEOUT = 10;
 
-    public Ryder(FPoint location) {
+    public Player(FPoint location) {
         super(location, SHIP_MAX_HEALTH, BULLET_TIMEOUT);
     }
 

@@ -12,7 +12,7 @@ public class BouncingBallActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        View bouncingBallView = new GraphicsTestView(this);
+        View bouncingBallView = new GameView(this);
 
         //Remove title bar
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);

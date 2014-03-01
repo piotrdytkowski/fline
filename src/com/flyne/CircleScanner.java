@@ -4,13 +4,6 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 
 public class CircleScanner {
-	
-	private float searchRadius;
-	
-	public CircleScanner(float searchRadius) {
-		super();
-		this.searchRadius = searchRadius;
-	}
 
 	/**
      * Scans for colours in a circle around the given x,y.
@@ -18,7 +11,7 @@ public class CircleScanner {
      * @param y the y coordinate to scan from.
      * @return whether a colour was found.
      */
-    public boolean scanCircleAtPoint(Bitmap drawingCache, float x, float y) {
+    public static boolean scanCircleAtPoint(Bitmap drawingCache, float searchRadius, float x, float y) {
         if (drawingCache != null) {
 			for (float xi = -searchRadius; xi <= searchRadius; xi+=5) {
 				for (float yi = -searchRadius; yi <= searchRadius; yi+=5) {
@@ -41,7 +34,7 @@ public class CircleScanner {
      * @param y the y coordinate to scan from.
      * @return the colour that was found.
      */
-    private int getColourAtLocation(Bitmap bitmap, float x, float y) {
+    private static int getColourAtLocation(Bitmap bitmap, float x, float y) {
         if(x < 0 || y < 0 || x >= bitmap.getWidth() || y >= bitmap.getHeight()) {
             return 0;
         }

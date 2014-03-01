@@ -13,10 +13,10 @@ public class Flyekazee extends Ship implements Drawable {
     private static final float SPEED = 15;
     private static final int MAX_HEALTH = 150;
     private boolean aligning = true;
-    private Ryder ryder;
+    private Player ryder;
     private int aligningSpeed;
 
-	public Flyekazee(FPoint location, Ryder ryder) {
+	public Flyekazee(FPoint location, Player ryder) {
 		super(location, MAX_HEALTH, 0);
 		this.ryder = ryder;
 		aligningSpeed = location.y == -100 ? 2 : -2;
