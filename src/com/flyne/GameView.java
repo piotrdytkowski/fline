@@ -64,6 +64,7 @@ public class GameView extends View {
         speedometer.setSpeed(gameState.getCurrentSpeed());
         healthBar.setCurrentHealth(gameState.getPlayer().getHealth());
 
+        cleanLocalCache();
         drawGame(canvas);
 
         if (!gameState.isGameOver()) {
@@ -71,8 +72,6 @@ public class GameView extends View {
 		} else {
 			showEndGameDialog();
 		}
-        
-        cleanLocalCache();
     }
 
     private void showEndGameDialog() {
