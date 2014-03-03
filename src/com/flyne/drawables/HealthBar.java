@@ -23,7 +23,6 @@ public class HealthBar implements Drawable {
         Paint outerPaint = new Paint(innerPaint);
         outerPaint.setStyle(Paint.Style.STROKE);
         float barWidth = (currentHealth / (float)maxHealth) * (HALF_WIDTH * 2);
-        System.out.println(barWidth);
         canvas.drawRect(location.x - HALF_WIDTH, location.y - HALF_HEIGHT, (location.x - HALF_WIDTH) + barWidth, location.y + HALF_HEIGHT, innerPaint);
         canvas.drawRect(location.x - HALF_WIDTH, location.y - HALF_HEIGHT, location.x+HALF_WIDTH, location.y + HALF_HEIGHT, outerPaint);
     }
