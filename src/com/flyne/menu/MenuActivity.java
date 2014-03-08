@@ -30,6 +30,33 @@ public class MenuActivity extends FragmentActivity implements MenuActionListener
 	}
 
 	@Override
+	public void onMenuAction(MenuAction action) {
+		switch(action) {
+		case NEW_GAME:
+			onNewGameSelected();
+			break;
+		case OPTIONS:
+			onOptionsSelected();
+			break;
+		case EXIT:
+			onExitSelected();
+			break;
+			//NEW GAME MENU
+		case INFINITY:
+			onInfinitySelected();
+			break;
+		case CAMPAIGN:
+			onCampaignSelected();
+			break;
+			
+		}
+	}
+	
+	private void onCampaignSelected() {
+		// TODO Auto-generated method stub
+		
+	}
+
 	public void onNewGameSelected() {
 		Fragment newGameFragment = new NewGameFragment();
 		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -37,19 +64,16 @@ public class MenuActivity extends FragmentActivity implements MenuActionListener
 		transaction.commit();
 	}
 
-	@Override
 	public void onOptionsSelected() {
 		// TODO Auto-generated method stub
 		
 	}
 
-	@Override
 	public void onExitSelected() {
 		// TODO Auto-generated method stub
 		
 	}
 	
-	@Override
 	public void onInfinitySelected() {
 		Intent intent = new Intent(MenuActivity.this, GameActivity.class);
 		MenuActivity.this.startActivity(intent);

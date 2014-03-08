@@ -3,4 +3,5 @@
     <string name="app_name">Flyne</string>
     <string name="newGameButton">New Game</string>
     <string name="infinityButton">Infinity</string>
+    <string name="campaignButton">Campaign (coming soon)</string>
 </resources>

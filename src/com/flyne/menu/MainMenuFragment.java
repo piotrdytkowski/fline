@@ -39,7 +39,7 @@ public class MainMenuFragment extends Fragment {
 		newGame.setOnClickListener(new Button.OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
-				listener.onNewGameSelected();
+				listener.onMenuAction(MenuAction.NEW_GAME);
 			}
 		});
 	}
@@ -48,7 +48,7 @@ public class MainMenuFragment extends Fragment {
 		options.setOnClickListener(new Button.OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
-				listener.onOptionsSelected();
+				listener.onMenuAction(MenuAction.OPTIONS);
 			}
 		});
 	}
@@ -57,7 +57,7 @@ public class MainMenuFragment extends Fragment {
 		exitGame.setOnClickListener(new Button.OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
-				listener.onExitSelected();
+				listener.onMenuAction(MenuAction.EXIT);
 			}
 		});
 	}

@@ -35,7 +35,7 @@ public class NewGameFragment extends Fragment {
 		newGame.setOnClickListener(new Button.OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
-				listener.onInfinitySelected();
+				listener.onMenuAction(MenuAction.INFINITY);
 			}
 		});
 	}
