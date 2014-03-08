@@ -103,9 +103,9 @@ public class GameView extends View {
             linePaint = PaintProvider.inactivePaint();
             electroPaint = PaintProvider.PAINT_ELECTRO_INACTIVE;
         }
-        gameState.getTrack().getLineView().draw(canvas, linePaint);
-        gameState.getTrack().getElectroView().draw(canvas, electroPaint);
-        gameState.getTrack().getLineView().draw(gameState.getLocalCanvas(), linePaint);
+        gameState.getTrack().getLineView().draw(gameState.getLocalCanvas(), electroPaint);
+        gameState.getTrack().getLineView().draw(canvas, electroPaint);
+        gameState.getTrack().getElectroView().draw(canvas, linePaint);
         speedometer.draw(canvas, PaintProvider.PAINT_NEEDLE);
         healthBar.draw(canvas, PaintProvider.PAINT_HEALTH_BAR);
     	canvas.drawText("Score: " + gameState.getScore(), TEXT_PADDING, TEXT_PADDING, PaintProvider.PAINT_TEXT);

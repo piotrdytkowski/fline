@@ -64,7 +64,7 @@ public class Track {
         @Override
         public void draw(Canvas canvas, Paint paint) {
             managePoints(canvas.getWidth(), canvas.getHeight());
-            canvas.drawPath(TrackGenerator.generateTrack(Track.this.points), paint);
+            canvas.drawPath(TrackGenerator.generateTrack(points), paint);
         }
 
         @Override
@@ -77,9 +77,11 @@ public class Track {
 
         @Override
         public void draw(Canvas canvas, Paint paint) {
-            for(int i = 0; i < 2; i++) {
-                canvas.drawPath(TrackGenerator.generateTrackWithOffset(points, ((float)Math.random()*500)-250, 40-(float)Math.random()*40.0f), paint);
-            }
+            canvas.drawPath(TrackGenerator.generateTrackWithOffset(points, 0, 10), paint);
+            paint.setStrokeWidth(2.0f);
+            canvas.drawPath(TrackGenerator.generateTrack(points), paint);
+            paint.setStrokeWidth(20.0f/3);
+            canvas.drawPath(TrackGenerator.generateTrackWithOffset(points, 0, -10), paint);
         }
 
         @Override

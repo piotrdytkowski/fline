@@ -1,17 +1,16 @@
 package com.flyne.menu;
 
-import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.view.Window;
 import android.view.WindowManager;
-
 import com.flyne.GameActivity;
 import com.flyne.R;
 
-public class MenuActivity extends Activity implements MenuActionListener {
+public class MenuActivity extends FragmentActivity implements MenuActionListener {
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -25,7 +24,7 @@ public class MenuActivity extends Activity implements MenuActionListener {
 		setContentView(R.layout.main_menu);
 
 		Fragment mainMenuFragment = new MainMenuFragment();
-		FragmentTransaction transaction = getFragmentManager().beginTransaction();
+		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 		transaction.replace(R.id.fragmentContainer, mainMenuFragment);
 		transaction.commit();
 	}
@@ -33,7 +32,7 @@ public class MenuActivity extends Activity implements MenuActionListener {
 	@Override
 	public void onNewGameSelected() {
 		Fragment newGameFragment = new NewGameFragment();
-		FragmentTransaction transaction = getFragmentManager().beginTransaction();
+		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 		transaction.replace(R.id.fragmentContainer, newGameFragment);
 		transaction.commit();
 	}

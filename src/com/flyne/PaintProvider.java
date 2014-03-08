@@ -13,7 +13,7 @@ public class PaintProvider {
             setStyle(Paint.Style.STROKE);
             setStrokeCap(Paint.Cap.ROUND);
             setColor(Color.GRAY);
-            setStrokeWidth(THICK_STROKE);
+            setStrokeWidth(THIN_STROKE/3);
             setAntiAlias(true);
         }
     };
@@ -22,7 +22,7 @@ public class PaintProvider {
             setStyle(Paint.Style.STROKE);
             setStrokeCap(Paint.Cap.ROUND);
             setColor(Color.RED);
-            setStrokeWidth(THIN_STROKE);
+            setStrokeWidth(THIN_STROKE/3);
             setAntiAlias(true);
         }
     };
@@ -31,7 +31,7 @@ public class PaintProvider {
             setStyle(Paint.Style.STROKE);
             setStrokeCap(Paint.Cap.ROUND);
             setColor(Color.YELLOW);
-            setStrokeWidth(THIN_STROKE);
+            setStrokeWidth(THIN_STROKE/3);
             setAntiAlias(true);
         }
     };
@@ -40,7 +40,7 @@ public class PaintProvider {
             setStyle(Paint.Style.STROKE);
             setStrokeCap(Paint.Cap.ROUND);
             setColor(Color.GREEN);
-            setStrokeWidth(THIN_STROKE);
+            setStrokeWidth(THIN_STROKE/3);
             setAntiAlias(true);
         }
     };
@@ -49,7 +49,7 @@ public class PaintProvider {
             setStyle(Paint.Style.STROKE);
             setStrokeCap(Paint.Cap.ROUND);
             setColor(Color.BLUE);
-            setStrokeWidth(THIN_STROKE);
+            setStrokeWidth(THIN_STROKE/3);
             setAntiAlias(true);
         }
     };
@@ -58,7 +58,7 @@ public class PaintProvider {
             setStyle(Paint.Style.STROKE);
             setStrokeCap(Paint.Cap.ROUND);
             setColor(Color.WHITE);
-            setStrokeWidth(2);
+            setStrokeWidth(THIN_STROKE);
             setAntiAlias(true);
         }
     };
@@ -66,8 +66,8 @@ public class PaintProvider {
         {
             setStyle(Paint.Style.STROKE);
             setStrokeCap(Paint.Cap.ROUND);
-            setColor(Color.BLUE);
-            setStrokeWidth(1);
+            setColor(Color.DKGRAY);
+            setStrokeWidth(THIN_STROKE);
             setAntiAlias(true);
         }
     };
