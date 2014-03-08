@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
-public class BouncingBallActivity extends Activity {
+public class GameActivity extends Activity {
 
     /** Called when the activity is first created. */
     @Override
