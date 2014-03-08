@@ -15,13 +15,10 @@ public class ItemDropHandler implements GameListener {
                 iterator.remove();
             } else {
                 if(itemDrop.getLocation().distance(gameState.getPlayer().getLocation()) < 40) {
-                    gameState.setShieldTimer(100);
+                    gameState.getPlayer().setShieldTimer(1000);
                     iterator.remove();
                 } else {
                     itemDrop.move(gameState.getCurrentSpeed());
-                    if(gameState.getShieldTimer() > 0) {
-                        gameState.setShieldTimer(gameState.getShieldTimer()-1);
-                    }
                 }
             }
         }

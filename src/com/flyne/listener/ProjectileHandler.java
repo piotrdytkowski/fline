@@ -46,7 +46,7 @@ public class ProjectileHandler implements GameListener {
                     if(distance < 20) {
                         gameState.getPlayer().takeDamage(projectile.getDamage());
                         projectileIterator.remove();
-                    } else if(gameState.getShieldTimer() > 0 && distance < 50) {
+                    } else if(gameState.getPlayer().isShieldActive() && distance < 50) {
                         projectile.setFriendly(true);
                         projectile.setAngle(FPoint.calculateAngleBetweenPoints(projectile.getLocation(), gameState.getPlayer().getLocation()));
                     }

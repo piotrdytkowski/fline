@@ -10,8 +10,8 @@ public class HealthBar implements Drawable {
     public static final int HALF_HEIGHT = 15;
 
     private FPoint location;
-    private int maxHealth;
-    private int currentHealth;
+    private float maxHealth;
+    private float currentHealth;
 
     public HealthBar(FPoint location, int maxHealth) {
         this.location = location;
@@ -32,7 +32,7 @@ public class HealthBar implements Drawable {
         return DrawingDepth.INTERFACE.getIndex();
     }
 
-    public void setCurrentHealth(int currentHealth) {
+    public void setCurrentHealth(float currentHealth) {
         this.currentHealth = currentHealth;
     }
 }
