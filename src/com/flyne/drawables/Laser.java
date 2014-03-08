@@ -11,15 +11,17 @@ public class Laser implements Drawable {
 
     private static final double SEARCH_SPEED = 0.1;
     private FPoint location;
-    private double angle = 90;
+    private double angle;
     private Player player;
     //true = clockwise, false = other
     private boolean direction = false;
     private boolean searching = true;
+    private boolean bottom;
 
-	public Laser(FPoint location, Player player) {
+	public Laser(boolean bottom, Player player) {
 		super();
-		this.location = location;
+        this.bottom = bottom;
+		this.angle = bottom ? -90 : 90;
 		this.player = player;
 	}
 
@@ -46,12 +48,12 @@ public class Laser implements Drawable {
         if(searching) {
             if (direction) {
                 angle += SEARCH_SPEED;
-                if (angle >= 180) {
+                if ((angle >= -90 && bottom) || (angle >= 180 && !bottom) ) {
                     direction = false;
                 }
             } else {
                 angle -= SEARCH_SPEED;
-                if (angle <= 90) {
+                if ((angle <= -180 && bottom) || (angle <= 90 && !bottom)) {
                     direction = true;
                 }
             }
@@ -59,6 +61,7 @@ public class Laser implements Drawable {
             if(Math.abs(angleToPlayer-angle) < 1) {
                 searching = false;
             }
+            System.out.println("angleToPlayer: " + angleToPlayer + " angle of laser: " + angle + " distance between angles: " +Math.abs(Math.abs(angleToPlayer)-angle));
         } else {
             angle = angleToPlayer;
             if(!player.isShieldActive()) {

@@ -17,8 +17,24 @@ public class Flyekazee extends Ship implements Drawable {
     private boolean aligning = true;
     private Player ryder;
     private int aligningSpeed;
+    private static final Path FLYEKAZEE = new Path();
+    static  {
+        FLYEKAZEE.moveTo(DIMENSION / 2, 0);
+        FLYEKAZEE.lineTo(- DIMENSION, - DIMENSION / 4);
+        FLYEKAZEE.lineTo(DIMENSION / 2, - DIMENSION / 8);
+        FLYEKAZEE.lineTo(- DIMENSION / 2, - DIMENSION / 2);
+        FLYEKAZEE.lineTo(DIMENSION / 2, - DIMENSION / 4);
+        FLYEKAZEE.lineTo(DIMENSION / 2, - DIMENSION / 2);
+        FLYEKAZEE.lineTo(DIMENSION, 0);
+        FLYEKAZEE.lineTo(DIMENSION / 2, DIMENSION / 2);
+        FLYEKAZEE.lineTo(DIMENSION / 2, DIMENSION / 4);
+        FLYEKAZEE.lineTo(- DIMENSION / 2, DIMENSION / 2);
+        FLYEKAZEE.lineTo(DIMENSION / 2, DIMENSION / 8);
+        FLYEKAZEE.lineTo(- DIMENSION, DIMENSION / 4);
+        FLYEKAZEE.lineTo(DIMENSION / 2, 0);
+    }
 
-	public Flyekazee(FPoint location, Player ryder) {
+    public Flyekazee(FPoint location, Player ryder) {
 		super(location, MAX_HEALTH, 0);
 		this.ryder = ryder;
 		aligningSpeed = location.y == -100 ? 2 : -2;
@@ -27,21 +43,10 @@ public class Flyekazee extends Ship implements Drawable {
 	@Override
 	public void draw(Canvas canvas) {
 		moveFlyekazee();
-		Path path = new Path();
-		path.moveTo(location.x + DIMENSION / 2, location.y);
-		path.lineTo(location.x - DIMENSION, location.y - DIMENSION / 4);
-		path.lineTo(location.x + DIMENSION / 2, location.y - DIMENSION / 8);
-		path.lineTo(location.x - DIMENSION / 2, location.y - DIMENSION / 2);
-		path.lineTo(location.x + DIMENSION / 2, location.y - DIMENSION / 4);
-		path.lineTo(location.x + DIMENSION / 2, location.y - DIMENSION / 2);
-		path.lineTo(location.x + DIMENSION, location.y);
-		path.lineTo(location.x + DIMENSION / 2, location.y + DIMENSION / 2);
-		path.lineTo(location.x + DIMENSION / 2, location.y + DIMENSION / 4);
-		path.lineTo(location.x - DIMENSION / 2, location.y + DIMENSION / 2);
-		path.lineTo(location.x + DIMENSION / 2, location.y + DIMENSION / 8);
-		path.lineTo(location.x - DIMENSION, location.y + DIMENSION / 4);
-		path.lineTo(location.x + DIMENSION / 2, location.y);
-		canvas.drawPath(path, PaintProvider.PAINT_FLYTER);
+        canvas.save();
+        canvas.translate(location.x, location.y);
+        canvas.drawPath(FLYEKAZEE, PaintProvider.PAINT_FLYTER);
+        canvas.restore();
 	}
 
 	private void moveFlyekazee() {
