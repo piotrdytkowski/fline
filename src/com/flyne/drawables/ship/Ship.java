@@ -6,7 +6,7 @@ import com.flyne.FPoint;
 
 public abstract class Ship implements Drawable {
     protected FPoint location;
-    protected float health;
+    protected int health;
     protected int bulletTimeout;
 
     protected Ship(FPoint location, int health, int bulletTimeout) {
@@ -23,11 +23,11 @@ public abstract class Ship implements Drawable {
         this.location = location;
     }
 
-    public void takeDamage(float damage) {
+    public void takeDamage(int damage) {
         health -= (damage > health ? health : damage);
     }
 
-    public float getHealth() {
+    public int getHealth() {
         return health;
     }
 

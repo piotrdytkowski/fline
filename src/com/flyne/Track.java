@@ -59,10 +59,20 @@ public class Track {
         return electroView;
     }
 
+    public void setLineViewPaint(Paint paint) {
+        lineView.setPaint(paint);
+    }
+
+    public void setElectroViewPaint(Paint paint) {
+        electroView.setPaint(paint);
+    }
+
     private class LineView implements Drawable {
 
+        private Paint paint;
+
         @Override
-        public void draw(Canvas canvas, Paint paint) {
+        public void draw(Canvas canvas) {
             managePoints(canvas.getWidth(), canvas.getHeight());
             canvas.drawPath(TrackGenerator.generateTrack(points), paint);
         }
@@ -71,12 +81,18 @@ public class Track {
         public int getIndex() {
             return DrawingDepth.BACKGROUND.getIndex();
         }
+
+        private void setPaint(Paint paint) {
+            this.paint = paint;
+        }
     }
 
     private class ElectroView implements Drawable {
 
+        private Paint paint;
+
         @Override
-        public void draw(Canvas canvas, Paint paint) {
+        public void draw(Canvas canvas) {
             canvas.drawPath(TrackGenerator.generateTrackWithOffset(points, 0, 10), paint);
             paint.setStrokeWidth(2.0f);
             canvas.drawPath(TrackGenerator.generateTrack(points), paint);
@@ -87,6 +103,10 @@ public class Track {
         @Override
         public int getIndex() {
             return DrawingDepth.BACKGROUND.getIndex();
+        }
+
+        private void setPaint(Paint paint) {
+            this.paint = paint;
         }
     }
 

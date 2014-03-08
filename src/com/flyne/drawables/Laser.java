@@ -24,17 +24,19 @@ public class Laser implements Drawable {
 	}
 
 	@Override
-	public void draw(Canvas canvas, Paint paint) {
+	public void draw(Canvas canvas) {
 		FPoint stopPoint = calculateEndPoint(canvas);
         if(!searching) {
-            paint = PaintProvider.PAINT_LASER_ACTIVE;
             if(player.isShieldActive()) {
                 FPoint playerLocation = player.getLocation();
                 FPoint fPoint = calculateReflectedEndPoint(canvas);
-                canvas.drawLine(playerLocation.x, playerLocation.y, fPoint.x, fPoint.y, paint);
+                canvas.drawLine(playerLocation.x, playerLocation.y, fPoint.x, fPoint.y, PaintProvider.PAINT_LASER_ACTIVE);
             }
+            canvas.drawLine(location.x, location.y, stopPoint.x, stopPoint.y, PaintProvider.PAINT_LASER_ACTIVE);
+
+        } else  {
+            canvas.drawLine(location.x, location.y, stopPoint.x, stopPoint.y, PaintProvider.PAINT_FLYTER);
         }
-		canvas.drawLine(location.x, location.y, stopPoint.x, stopPoint.y, paint);
 
 		adjustAngle();
 	}
@@ -60,7 +62,7 @@ public class Laser implements Drawable {
         } else {
             angle = angleToPlayer;
             if(!player.isShieldActive()) {
-                player.takeDamage(0.1f);
+                player.takeDamage(1);
             } else {
                 // TODO: Damage Enemies
             }

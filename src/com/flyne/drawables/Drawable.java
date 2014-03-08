@@ -15,6 +15,6 @@ public interface Drawable {
             return index;
         }
     }
-    void draw(Canvas canvas, Paint paint);
+    void draw(Canvas canvas);
     int getIndex();
 }

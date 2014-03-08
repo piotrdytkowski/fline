@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 
+import com.flyne.PaintProvider;
 import com.flyne.drawables.Drawable;
 import com.flyne.FPoint;
 
@@ -12,6 +13,7 @@ public class Flyekazee extends Ship implements Drawable {
 	private static final float DIMENSION = 80;
     private static final float SPEED = 15;
     private static final int MAX_HEALTH = 150;
+    private static final int DAMAGE = 150;
     private boolean aligning = true;
     private Player ryder;
     private int aligningSpeed;
@@ -23,7 +25,7 @@ public class Flyekazee extends Ship implements Drawable {
 	}
 
 	@Override
-	public void draw(Canvas canvas, Paint paint) {
+	public void draw(Canvas canvas) {
 		moveFlyekazee();
 		Path path = new Path();
 		path.moveTo(location.x + DIMENSION / 2, location.y);
@@ -39,7 +41,7 @@ public class Flyekazee extends Ship implements Drawable {
 		path.lineTo(location.x + DIMENSION / 2, location.y + DIMENSION / 8);
 		path.lineTo(location.x - DIMENSION, location.y + DIMENSION / 4);
 		path.lineTo(location.x + DIMENSION / 2, location.y);
-		canvas.drawPath(path, paint);
+		canvas.drawPath(path, PaintProvider.PAINT_FLYTER);
 	}
 
 	private void moveFlyekazee() {
@@ -53,7 +55,7 @@ public class Flyekazee extends Ship implements Drawable {
 			location.x -= SPEED;
 			if (location.x - DIMENSION < ryder.location.x && location.x + DIMENSION > ryder.location.x) {
 				if (location.y - DIMENSION / 2 < ryder.location.y && location.y + DIMENSION / 2 > ryder.location.y) {
-					ryder.takeDamage(15);
+					ryder.takeDamage(DAMAGE);
 					this.health = 0;
 				}
 			}
