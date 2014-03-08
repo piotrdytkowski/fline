@@ -1,14 +1,13 @@
 package com.flyne.drawables.ship;
 
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Path;
-
 import java.util.List;
 
+import android.graphics.Canvas;
+import android.graphics.Path;
+
+import com.flyne.FPoint;
 import com.flyne.PaintProvider;
 import com.flyne.drawables.Drawable;
-import com.flyne.FPoint;
 import com.flyne.drawables.Projectile;
 
 public class Flyter extends Ship implements Drawable {
@@ -21,6 +20,18 @@ public class Flyter extends Ship implements Drawable {
 
     private List<Projectile> projectiles;
     private FPoint destination;
+    private static final Path FLYTER;
+    static {
+    	FLYTER = new Path();
+		FLYTER.moveTo(- 0.375f * DIMENSION, 0);
+		FLYTER.lineTo(- 0.5f * DIMENSION, - 0.25f * DIMENSION);
+		FLYTER.lineTo(0.5f * DIMENSION, - DIMENSION);
+		FLYTER.lineTo(0, 0);
+		FLYTER.lineTo(0.5f * DIMENSION, DIMENSION);
+		FLYTER.lineTo(- 0.5f * DIMENSION, 0.25f * DIMENSION);
+		FLYTER.lineTo(- 0.375f * DIMENSION, 0);
+		FLYTER.lineTo(- 0.75f * DIMENSION, 0);
+    }
 
     public Flyter(List<Projectile> projectiles, FPoint location) {
         super(location, FLYTER_MAX_HEALTH, BULLET_TIMEOUT);
@@ -30,19 +41,12 @@ public class Flyter extends Ship implements Drawable {
 	@Override
 	public void draw(Canvas canvas) {
 		moveFlyter(canvas.getWidth(), canvas.getHeight());
-		Path flyter = new Path();
-		flyter.moveTo(location.x - 0.375f * DIMENSION, location.y);
-		flyter.lineTo(location.x - 0.5f * DIMENSION, location.y - 0.25f * DIMENSION);
-		flyter.lineTo(location.x + 0.5f * DIMENSION, location.y - DIMENSION);
-		flyter.lineTo(location.x, location.y);
-		flyter.lineTo(location.x + 0.5f * DIMENSION, location.y + DIMENSION);
-		flyter.lineTo(location.x - 0.5f * DIMENSION, location.y + 0.25f * DIMENSION);
-		flyter.lineTo(location.x - 0.375f * DIMENSION, location.y);
-		flyter.lineTo(location.x - 0.75f * DIMENSION, location.y);
+		canvas.save();
+		canvas.translate(location.x, location.y);
+		canvas.drawPath(FLYTER, PaintProvider.PAINT_FLYTER);
+		canvas.restore();
 		
 		fireProjectile();
-		
-		canvas.drawPath(flyter, PaintProvider.PAINT_FLYTER);
 	}
 
     private void fireProjectile() {
