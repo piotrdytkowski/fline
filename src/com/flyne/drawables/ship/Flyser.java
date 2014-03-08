@@ -5,6 +5,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 
 import com.flyne.FPoint;
+import com.flyne.PaintProvider;
 import com.flyne.drawables.Laser;
 
 public class Flyser extends Ship {
@@ -23,7 +24,7 @@ public class Flyser extends Ship {
 	}
 
 	@Override
-	public void draw(Canvas canvas, Paint paint) {
+	public void draw(Canvas canvas) {
 		Path path = new Path();
 		path.moveTo(location.x + DIMENSION * .5f, location.y - DIMENSION * .1f);
 		path.lineTo(location.x - DIMENSION * .2f, location.y + DIMENSION * .2f);
@@ -33,7 +34,7 @@ public class Flyser extends Ship {
 		path.lineTo(location.x + DIMENSION * .3f, location.y - DIMENSION * .3f);
 		path.lineTo(location.x - DIMENSION * .5f, location.y - DIMENSION * .5f);
 		path.lineTo(location.x + DIMENSION * .5f, location.y - DIMENSION * .5f);
-		canvas.drawPath(path, paint);
+		canvas.drawPath(path, PaintProvider.PAINT_FLYTER);
 		if (aligning) {
 			location.x -= SPEED;
 			if (location.x + DIMENSION < canvas.getWidth()) {
@@ -41,7 +42,7 @@ public class Flyser extends Ship {
 				laser.setLocation(new FPoint(location.x - DIMENSION * .2f, location.y + DIMENSION * .2f));
 			}
 		} else {
-			laser.draw(canvas, paint);
+			laser.draw(canvas);
 		}
 	}
 

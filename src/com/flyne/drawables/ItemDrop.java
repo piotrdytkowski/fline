@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 import com.flyne.FPoint;
+import com.flyne.PaintProvider;
 
 public class ItemDrop implements Drawable {
 
@@ -16,7 +17,7 @@ public class ItemDrop implements Drawable {
     }
 
     @Override
-    public void draw(Canvas canvas, Paint paint) {
+    public void draw(Canvas canvas) {
         Path path = new Path();
         path.moveTo(location.x, location.y-DIMENSION/4);
         path.lineTo(location.x+DIMENSION/2, location.y-DIMENSION/2);
@@ -26,7 +27,7 @@ public class ItemDrop implements Drawable {
         path.lineTo(location.x-DIMENSION/2, location.y-DIMENSION/2);
         path.lineTo(location.x, location.y-DIMENSION/4);
 
-        canvas.drawPath(path, paint);
+        canvas.drawPath(path, PaintProvider.PAINT_ITEM_DROP_SHIELD);
     }
 
     public void move(float amount) {

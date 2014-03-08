@@ -3,6 +3,7 @@ package com.flyne.drawables;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import com.flyne.FPoint;
+import com.flyne.PaintProvider;
 import com.flyne.drawables.Drawable;
 
 public class Projectile implements Drawable {
@@ -36,9 +37,13 @@ public class Projectile implements Drawable {
     }
 
     @Override
-    public void draw(Canvas canvas, Paint paint) {
+    public void draw(Canvas canvas) {
         FPoint end = FPoint.moveTowards(location, angle, LENGTH);
-        canvas.drawLine(location.x, location.y, end.x, end.y, paint);
+        if(friendly) {
+            canvas.drawLine(location.x, location.y, end.x, end.y, PaintProvider.PAINT_PROJECTILE);
+        } else {
+            canvas.drawLine(location.x, location.y, end.x, end.y, PaintProvider.PAINT_FLYTER_PROJECTILE);
+        }
         location.move(angle, SPEED);
     }
 

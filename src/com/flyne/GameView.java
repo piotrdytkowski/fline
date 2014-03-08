@@ -94,46 +94,40 @@ public class GameView extends View {
 	}
 
 	private void drawGame(Canvas canvas) {
-        Paint linePaint;
-        Paint electroPaint;
         if(gameState.isLineHit()) {
-            linePaint = PaintProvider.activePaint(gameState.getCurrentSpeed(), gameState.getGameParameters().getMaxSpeed());
-            electroPaint = PaintProvider.PAINT_ELECTRO_ACTIVE;
+            gameState.getTrack().setElectroViewPaint(PaintProvider.activePaint(gameState.getCurrentSpeed(), gameState.getGameParameters().getMaxSpeed()));
+            gameState.getTrack().setLineViewPaint(PaintProvider.PAINT_ELECTRO_ACTIVE);
         } else {
-            linePaint = PaintProvider.inactivePaint();
-            electroPaint = PaintProvider.PAINT_ELECTRO_INACTIVE;
+            gameState.getTrack().setElectroViewPaint(PaintProvider.inactivePaint());
+            gameState.getTrack().setLineViewPaint(PaintProvider.PAINT_ELECTRO_INACTIVE);
         }
-        gameState.getTrack().getLineView().draw(gameState.getLocalCanvas(), electroPaint);
-        gameState.getTrack().getLineView().draw(canvas, electroPaint);
-        gameState.getTrack().getElectroView().draw(canvas, linePaint);
-        speedometer.draw(canvas, PaintProvider.PAINT_NEEDLE);
-        healthBar.draw(canvas, PaintProvider.PAINT_HEALTH_BAR);
+        gameState.getTrack().getLineView().draw(gameState.getLocalCanvas());
+        gameState.getTrack().getLineView().draw(canvas);
+        gameState.getTrack().getElectroView().draw(canvas);
+        speedometer.draw(canvas);
+        healthBar.draw(canvas);
     	canvas.drawText("Score: " + gameState.getScore(), TEXT_PADDING, TEXT_PADDING, PaintProvider.PAINT_TEXT);
         drawProjectiles(canvas);
         drawEnemyShips(canvas);
         drawItemDrops(canvas);
-        gameState.getPlayer().draw(canvas, PaintProvider.PAINT_RYDER);
+        gameState.getPlayer().draw(canvas);
 	}
 
     private void drawItemDrops(Canvas canvas) {
         for (ItemDrop itemDrop : gameState.getItemDrops()) {
-            itemDrop.draw(canvas, PaintProvider.PAINT_ITEM_DROP_SHIELD);
+            itemDrop.draw(canvas);
         }
     }
 
     private void drawProjectiles(Canvas canvas) {
         for (Projectile projectile : gameState.getProjectiles()) {
-            if (projectile.isFriendly()) {
-                projectile.draw(canvas, PaintProvider.PAINT_PROJECTILE);
-            } else {
-                projectile.draw(canvas, PaintProvider.PAINT_FLYTER_PROJECTILE);
-            }
+            projectile.draw(canvas);
         }
     }
 
     private void drawEnemyShips(Canvas canvas) {
         for (Ship ship : gameState.getEnemyShips()) {
-            ship.draw(canvas, PaintProvider.PAINT_FLYTER);
+            ship.draw(canvas);
         }
     }
 

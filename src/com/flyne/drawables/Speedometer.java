@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import com.flyne.FPoint;
+import com.flyne.PaintProvider;
 
 public class Speedometer implements Drawable {
 
@@ -20,7 +21,7 @@ public class Speedometer implements Drawable {
     }
 
     @Override
-    public void draw(Canvas canvas, Paint paint) {
+    public void draw(Canvas canvas) {
     	if (width == 0) {
     		width = (int)(canvas.getWidth() * .15);
     		height = (int)(width * .62);
@@ -28,10 +29,10 @@ public class Speedometer implements Drawable {
     	}
     	int leftX = (int)(canvas.getWidth() * .85);
     	int topY = (int)(canvas.getHeight() * .01);
-        canvas.drawBitmap(speedometerImage, leftX, topY, paint);
+        canvas.drawBitmap(speedometerImage, leftX, topY, PaintProvider.PAINT_NEEDLE);
         int needleY = (int)(topY + height * .8);
         FPoint endPoint = (new FPoint(leftX + width / 2, needleY)).move((speed / maxSpeed) * 180 + 180, (int)(height * .7));
-        canvas.drawLine(leftX + width / 2, needleY, endPoint.x, endPoint.y, paint);
+        canvas.drawLine(leftX + width / 2, needleY, endPoint.x, endPoint.y, PaintProvider.PAINT_NEEDLE);
     }
 
     @Override

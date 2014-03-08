@@ -24,10 +24,4 @@ public class GameActivity extends Activity {
         setContentView(bouncingBallView);
     }
 
-
-//    @Override
-//    protected void onStop() {
-//        Debug.stopMethodTracing();
-//    }
-
 }

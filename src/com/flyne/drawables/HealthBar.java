@@ -3,6 +3,7 @@ package com.flyne.drawables;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import com.flyne.FPoint;
+import com.flyne.PaintProvider;
 
 public class HealthBar implements Drawable {
 
@@ -19,12 +20,10 @@ public class HealthBar implements Drawable {
     }
 
     @Override
-    public void draw(Canvas canvas, Paint innerPaint) {
-        Paint outerPaint = new Paint(innerPaint);
-        outerPaint.setStyle(Paint.Style.STROKE);
+    public void draw(Canvas canvas) {
         float barWidth = (currentHealth / (float)maxHealth) * (HALF_WIDTH * 2);
-        canvas.drawRect(location.x - HALF_WIDTH, location.y - HALF_HEIGHT, (location.x - HALF_WIDTH) + barWidth, location.y + HALF_HEIGHT, innerPaint);
-        canvas.drawRect(location.x - HALF_WIDTH, location.y - HALF_HEIGHT, location.x+HALF_WIDTH, location.y + HALF_HEIGHT, outerPaint);
+        canvas.drawRect(location.x - HALF_WIDTH, location.y - HALF_HEIGHT, (location.x - HALF_WIDTH) + barWidth, location.y + HALF_HEIGHT, PaintProvider.PAINT_HEALTH_BAR_INNER);
+        canvas.drawRect(location.x - HALF_WIDTH, location.y - HALF_HEIGHT, location.x+HALF_WIDTH, location.y + HALF_HEIGHT, PaintProvider.PAINT_HEALTH_BAR_OUTER);
     }
 
     @Override

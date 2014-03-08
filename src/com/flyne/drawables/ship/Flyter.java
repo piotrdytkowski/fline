@@ -6,6 +6,7 @@ import android.graphics.Path;
 
 import java.util.List;
 
+import com.flyne.PaintProvider;
 import com.flyne.drawables.Drawable;
 import com.flyne.FPoint;
 import com.flyne.drawables.Projectile;
@@ -15,7 +16,7 @@ public class Flyter extends Ship implements Drawable {
     private static final float DIMENSION = 40;
     private static final float SPEED = 3;
     private static final int BULLET_TIMEOUT = 50;
-    private static final int FLYTER_DAMAGE = 5;
+    private static final int FLYTER_DAMAGE = 50;
     private static final int FLYTER_MAX_HEALTH = 100;
 
     private List<Projectile> projectiles;
@@ -27,7 +28,7 @@ public class Flyter extends Ship implements Drawable {
 	}
 
 	@Override
-	public void draw(Canvas canvas, Paint paint) {
+	public void draw(Canvas canvas) {
 		moveFlyter(canvas.getWidth(), canvas.getHeight());
 		Path flyter = new Path();
 		flyter.moveTo(location.x - 0.375f * DIMENSION, location.y);
@@ -41,7 +42,7 @@ public class Flyter extends Ship implements Drawable {
 		
 		fireProjectile();
 		
-		canvas.drawPath(flyter, paint);
+		canvas.drawPath(flyter, PaintProvider.PAINT_FLYTER);
 	}
 
     private void fireProjectile() {

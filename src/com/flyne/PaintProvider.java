@@ -98,6 +98,15 @@ public class PaintProvider {
             setStrokeJoin(Join.MITER);
         }
     };
+    public static final Paint PAINT_LASER_ACTIVE = new Paint() {
+        {
+            setStyle(Paint.Style.STROKE);
+            setColor(Color.RED);
+            setStrokeWidth(5);
+            setAntiAlias(true);
+            setStrokeJoin(Join.MITER);
+        }
+    };
     public static final Paint PAINT_PROJECTILE = new Paint() {
         {
             setStyle(Paint.Style.STROKE);
@@ -130,11 +139,27 @@ public class PaintProvider {
             setAntiAlias(true);
         }
     };
-    public static final Paint PAINT_HEALTH_BAR = new Paint() {
+    public static final Paint PAINT_HEALTH_BAR_INNER = new Paint() {
         {
             setStyle(Style.FILL_AND_STROKE);
             setColor(Color.rgb(50, 210, 40));
             setStrokeWidth(2);
+            setAntiAlias(true);
+        }
+    };
+    public static final Paint PAINT_HEALTH_BAR_OUTER = new Paint() {
+        {
+            setStyle(Style.STROKE);
+            setColor(Color.rgb(50, 210, 40));
+            setStrokeWidth(2);
+            setAntiAlias(true);
+        }
+    };
+    public static final Paint PAINT_SHIELD = new Paint() {
+        {
+            setStyle(Style.STROKE);
+            setColor(Color.rgb(30,162,200));
+            setStrokeWidth(5);
             setAntiAlias(true);
         }
     };
