@@ -25,9 +25,9 @@ public class GameActivity extends Activity {
     }
 
 
-    @Override
-    protected void onStop() {
-        //Debug.stopMethodTracing();
-    }
+//    @Override
+//    protected void onStop() {
+//        Debug.stopMethodTracing();
+//    }
 
 }

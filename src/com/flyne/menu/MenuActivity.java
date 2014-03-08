@@ -41,7 +41,7 @@ public class MenuActivity extends FragmentActivity implements MenuActionListener
 		case EXIT:
 			onExitSelected();
 			break;
-			//NEW GAME MENU
+		//NEW GAME MENU
 		case INFINITY:
 			onInfinitySelected();
 			break;
@@ -51,33 +51,29 @@ public class MenuActivity extends FragmentActivity implements MenuActionListener
 			
 		}
 	}
-	
-	private void onCampaignSelected() {
-		// TODO Auto-generated method stub
-		
-	}
 
 	public void onNewGameSelected() {
 		Fragment newGameFragment = new NewGameFragment();
 		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 		transaction.replace(R.id.fragmentContainer, newGameFragment);
+		transaction.addToBackStack(null);
 		transaction.commit();
 	}
 
 	public void onOptionsSelected() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	public void onExitSelected() {
-		// TODO Auto-generated method stub
-		
+		this.finish();
 	}
 	
 	public void onInfinitySelected() {
 		Intent intent = new Intent(MenuActivity.this, GameActivity.class);
-		MenuActivity.this.startActivity(intent);
-		MenuActivity.this.finish();
+		this.startActivity(intent);
+		this.finish();
+	}
+	
+	private void onCampaignSelected() {
 	}
 	
 }

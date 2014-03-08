@@ -3,20 +3,27 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:gravity="center"
     tools:context=".menu.MenuActivity" >
 	<Button android:id="@+id/newGameButton"
-        android:text="New Game"
+        android:text="@string/newGameButton"
         android:layout_width="match_parent"
-    	android:layout_height="wrap_content"
+    	android:layout_height="100dp"
+    	android:textColor="@color/textColour"
+    	android:background="@android:color/transparent"
         />
 	<Button android:id="@+id/optionsButton"
-        android:text="Options"
+        android:text="@string/optionsButton"
         android:layout_width="match_parent"
-    	android:layout_height="wrap_content"
+    	android:layout_height="100dp"
+    	android:textColor="@color/textColour"
+    	android:background="@android:color/transparent"
         />
 	<Button android:id="@+id/exitGameButton"
-        android:text="Exit"
+        android:text="@string/exitButton"
         android:layout_width="match_parent"
-    	android:layout_height="wrap_content"
+    	android:layout_height="100dp"
+    	android:textColor="@color/textColour"
+    	android:background="@android:color/transparent"
         />
 </LinearLayout>
