@@ -16,22 +16,28 @@ public class Player extends Ship implements Drawable {
     private int bulletTimeout = 0;
     private int shieldTimer;
 
+    private static final Path PLAYER = new Path();
+    static {
+        float halfDim = SHIP_DIMENSIONS / 2;
+        float quarterDim = SHIP_DIMENSIONS / 4;
+        PLAYER.moveTo(- halfDim, - halfDim);
+        PLAYER.lineTo(halfDim, 0);
+        PLAYER.lineTo(- halfDim, halfDim);
+        PLAYER.lineTo(- quarterDim, 0);
+        PLAYER.lineTo(- halfDim, - halfDim);
+        PLAYER.lineTo(halfDim, 0);
+    }
+
     public Player(FPoint location) {
         super(location, SHIP_MAX_HEALTH, BULLET_TIMEOUT);
     }
 
     @Override
     public void draw(Canvas canvas) {
-        Path ship = new Path();
-        float halfDim = SHIP_DIMENSIONS / 2;
-        float quarterDim = SHIP_DIMENSIONS / 4;
-        ship.moveTo(location.x - halfDim, location.y - halfDim);
-        ship.lineTo(location.x + halfDim, location.y);
-        ship.lineTo(location.x - halfDim, location.y + halfDim);
-        ship.lineTo(location.x - quarterDim, location.y);
-        ship.lineTo(location.x - halfDim, location.y - halfDim);
-        ship.lineTo(location.x + halfDim, location.y);
-        canvas.drawPath(ship, PaintProvider.PAINT_RYDER);
+        canvas.save();
+        canvas.translate(location.x, location.y);
+        canvas.drawPath(PLAYER, PaintProvider.PAINT_RYDER);
+        canvas.restore();
         if(shieldTimer > 0) {
             shieldTimer--;
             canvas.drawCircle(location.x, location.y, SHIP_DIMENSIONS*2, PaintProvider.PAINT_SHIELD);

@@ -22,7 +22,11 @@ public class Spawner implements GameListener {
             gameState.getItemDrops().add(new ItemDrop(new FPoint(gameState.getWidth() + 100, (float)Math.random()*gameState.getHeight())));
         }
         if (Math.random() < 0.001) {
-        	gameState.getEnemyShips().add(new Flyser(new FPoint(gameState.getWidth() + 100, 100), gameState.getPlayer()));
+            if(Math.random() < 0.5) {
+        	    gameState.getEnemyShips().add(new Flyser(new FPoint(gameState.getWidth() + 100, 100), gameState.getPlayer(), false));
+            } else {
+                gameState.getEnemyShips().add(new Flyser(new FPoint(gameState.getWidth() + 100, gameState.getHeight()-100), gameState.getPlayer(), true));
+            }
         }
 	}
 }
