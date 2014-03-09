@@ -3,6 +3,7 @@
     <string name="app_name">Flyne</string>
     <string name="newGameButton">New Game</string>
     <string name="optionsButton">Options</string>
+    <string name="highScoresButton">High Scores</string>
     <string name="exitButton">Exit</string>
     <string name="infinityButton">Infinite mode</string>
     <string name="campaignButton">Campaign (coming soon)</string>

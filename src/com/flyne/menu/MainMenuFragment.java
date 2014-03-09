@@ -23,12 +23,14 @@ public class MainMenuFragment extends Fragment {
 		attachNewGameListener(newGame);
 		Button options = (Button)view.findViewById(R.id.optionsButton);
 		attachOptionsListener(options);
+		Button highScores = (Button)view.findViewById(R.id.highScoresButton);
+		attachHighScoresListener(highScores);
 		Button exitGame = (Button)view.findViewById(R.id.exitGameButton);
 		attachExitGameListener(exitGame);
 		
 		return view;
 	}
-	
+
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
@@ -49,6 +51,15 @@ public class MainMenuFragment extends Fragment {
 			@Override
 			public void onClick(View arg0) {
 				listener.onMenuAction(MenuAction.OPTIONS);
+			}
+		});
+	}
+	
+	private void attachHighScoresListener(Button highScores) {
+		highScores.setOnClickListener(new Button.OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				listener.onMenuAction(MenuAction.HIGH_SCORES);
 			}
 		});
 	}

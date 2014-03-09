@@ -19,6 +19,13 @@
     	android:textColor="@color/textColour"
     	android:background="@android:color/transparent"
         />
+	<Button android:id="@+id/highScoresButton"
+        android:text="@string/highScoresButton"
+        android:layout_width="match_parent"
+    	android:layout_height="100dp"
+    	android:textColor="@color/textColour"
+    	android:background="@android:color/transparent"
+        />
 	<Button android:id="@+id/exitGameButton"
         android:text="@string/exitButton"
         android:layout_width="match_parent"

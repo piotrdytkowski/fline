@@ -1,0 +1,6 @@
+<TextView xmlns:android="http://schemas.android.com/apk/res/android" 
+	android:id="@+id/hi_score_item"
+	android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:textColor="@color/textColour"
+    android:gravity="center" />

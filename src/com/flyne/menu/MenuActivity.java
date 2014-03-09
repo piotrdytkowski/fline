@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.view.Window;
 import android.view.WindowManager;
+
 import com.flyne.GameActivity;
 import com.flyne.R;
 
@@ -40,6 +41,9 @@ public class MenuActivity extends FragmentActivity implements MenuActionListener
 		case OPTIONS:
 			onOptionsSelected();
 			break;
+		case HIGH_SCORES:
+			onHighScoresSelected();
+			break;
 		case EXIT:
 			onExitSelected();
 			break;
@@ -50,9 +54,20 @@ public class MenuActivity extends FragmentActivity implements MenuActionListener
 		case CAMPAIGN:
 			onCampaignSelected();
 			break;
-			
+		default:
+			throw new UnsupportedOperationException();
 		}
 	}
+
+	private void onHighScoresSelected() {
+		Fragment highScoresFragment = new HighscoreFragment();
+		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+		transaction.replace(R.id.fragmentContainer, highScoresFragment);
+		transaction.addToBackStack(null);
+		transaction.commit();
+	}
+
+
 
 	public void onNewGameSelected() {
 		Fragment newGameFragment = new NewGameFragment();
