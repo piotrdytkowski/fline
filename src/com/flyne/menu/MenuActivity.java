@@ -10,6 +10,7 @@ import android.view.WindowManager;
 
 import com.flyne.GameActivity;
 import com.flyne.R;
+import com.flyne.menu.highscores.HighScoreFragment;
 
 public class MenuActivity extends FragmentActivity implements MenuActionListener {
 	
@@ -60,7 +61,7 @@ public class MenuActivity extends FragmentActivity implements MenuActionListener
 	}
 
 	private void onHighScoresSelected() {
-		Fragment highScoresFragment = new HighscoreFragment();
+		Fragment highScoresFragment = new HighScoreFragment();
 		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 		transaction.replace(R.id.fragmentContainer, highScoresFragment);
 		transaction.addToBackStack(null);
