@@ -20,6 +20,7 @@ import com.flyne.drawables.ItemDrop;
 import com.flyne.drawables.Projectile;
 import com.flyne.drawables.Speedometer;
 import com.flyne.listener.*;
+import com.flyne.menu.highscores.HighScoreOpenHelper;
 import com.flyne.drawables.ship.Player;
 import com.flyne.drawables.ship.Ship;
 
@@ -75,6 +76,8 @@ public class GameView extends View {
     }
 
     private void showEndGameDialog() {
+    	HighScoreOpenHelper helper = new HighScoreOpenHelper(getContext());
+    	helper.checkAndUpdateHighScores("Player", gameState.getScore());
     	AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext());
 		String message = gameState.getPlayer().isDead() ? "Game Over. You were destroyed." : "Game Over. You dropped. Keep flyin!";
 		builder.setMessage(message)

@@ -26,7 +26,7 @@ public class HighScoreOpenHelper extends SQLiteOpenHelper {
 
 	private static final String INSERT_ROW_TEMPLATE = "INSERT INTO " +
 			TABLE_NAME + "(" + NAME +
-			", " + SCORE + ")" + " VALUES (%s, %d);";
+			", " + SCORE + ")" + " VALUES ('%s', %d);";
 	
 	private static final String REMOVE_ROW_TEMPLATE = "DELETE FROM " + TABLE_NAME + " WHERE " + ID + " = %d;";
 
@@ -72,16 +72,16 @@ public class HighScoreOpenHelper extends SQLiteOpenHelper {
 		db.execSQL(TABLE_CREATE);
 		String[] queries = 
 			{
-				String.format(INSERT_ROW_TEMPLATE, "'John Doe'", 1000000000),
-				String.format(INSERT_ROW_TEMPLATE, "'John Doe'", 100000000),
-				String.format(INSERT_ROW_TEMPLATE, "'John Doe'", 10000000),
-				String.format(INSERT_ROW_TEMPLATE, "'John Doe'", 1000000),
-				String.format(INSERT_ROW_TEMPLATE, "'John Doe'", 100000),
-				String.format(INSERT_ROW_TEMPLATE, "'John Doe'", 10000),
-				String.format(INSERT_ROW_TEMPLATE, "'John Doe'", 1000),
-				String.format(INSERT_ROW_TEMPLATE, "'John Doe'", 100),
-				String.format(INSERT_ROW_TEMPLATE, "'John Doe'", 10),
-				String.format(INSERT_ROW_TEMPLATE, "'John Doe'", 1),
+				String.format(INSERT_ROW_TEMPLATE, "John Doe", 1000000000),
+				String.format(INSERT_ROW_TEMPLATE, "John Doe", 100000000),
+				String.format(INSERT_ROW_TEMPLATE, "John Doe", 10000000),
+				String.format(INSERT_ROW_TEMPLATE, "John Doe", 1000000),
+				String.format(INSERT_ROW_TEMPLATE, "John Doe", 100000),
+				String.format(INSERT_ROW_TEMPLATE, "John Doe", 10000),
+				String.format(INSERT_ROW_TEMPLATE, "John Doe", 1000),
+				String.format(INSERT_ROW_TEMPLATE, "John Doe", 100),
+				String.format(INSERT_ROW_TEMPLATE, "John Doe", 10),
+				String.format(INSERT_ROW_TEMPLATE, "John Doe", 1),
 			};
 		for (String query : queries) {
 			db.execSQL(query);
