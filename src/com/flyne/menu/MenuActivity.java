@@ -21,13 +21,15 @@ public class MenuActivity extends FragmentActivity implements MenuActionListener
         //Remove notification bar
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		
-		setContentView(R.layout.main_menu);
+        setContentView(new MenuLayout(this, null));
 
 		Fragment mainMenuFragment = new MainMenuFragment();
 		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 		transaction.replace(R.id.fragmentContainer, mainMenuFragment);
 		transaction.commit();
 	}
+	
+	
 
 	@Override
 	public void onMenuAction(MenuAction action) {

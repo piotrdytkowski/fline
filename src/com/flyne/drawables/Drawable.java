@@ -1,7 +1,6 @@
 package com.flyne.drawables;
 
 import android.graphics.Canvas;
-import android.graphics.Paint;
 
 public interface Drawable {
     public enum DrawingDepth {
