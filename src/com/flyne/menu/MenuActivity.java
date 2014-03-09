@@ -30,8 +30,6 @@ public class MenuActivity extends FragmentActivity implements MenuActionListener
 		transaction.replace(R.id.fragmentContainer, mainMenuFragment);
 		transaction.commit();
 	}
-	
-	
 
 	@Override
 	public void onMenuAction(MenuAction action) {
@@ -68,8 +66,6 @@ public class MenuActivity extends FragmentActivity implements MenuActionListener
 		transaction.commit();
 	}
 
-
-
 	public void onNewGameSelected() {
 		Fragment newGameFragment = new NewGameFragment();
 		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -88,7 +84,6 @@ public class MenuActivity extends FragmentActivity implements MenuActionListener
 	public void onInfinitySelected() {
 		Intent intent = new Intent(MenuActivity.this, GameActivity.class);
 		this.startActivity(intent);
-		this.finish();
 	}
 	
 	private void onCampaignSelected() {
